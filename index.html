@@ -21,7 +21,7 @@
                 <input type="password" id="password" name="password" required>
 
                 <button class="submit" type="submit">Login</button>
-                <p class="signup">Don't have an account? <a href="html/signup.html">Sign up</a></p>
+                <p class="signup">Don't have an account? <a href="signup.html">Sign up</a></p>
             </form>
         </div>
     </div>
@@ -57,7 +57,7 @@
             .then((userCredential) => {
                 // User is signed in for this session only
                 //localStorage.setItem("userEmail", userCredential.user.email);
-                window.location.href = "html/home.html";
+                window.location.href = "home.html";
             })
             .catch((error) => {
                 alert(error.message);
@@ -73,6 +73,6 @@
             });*/
         });
 </script>
-<script type="module" src="/script/login.js"></script>
+<script type="module" src="script/login.js"></script>
 </body>
 </html>

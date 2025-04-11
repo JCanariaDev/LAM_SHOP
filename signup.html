@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/signup.css">
+    <link rel="stylesheet" href="css/signup.css">
     <title>Signup</title>
 </head>
 <body>
     <header>     
-        <h2 class="name"><img src="/images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
+        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
     </header>
     <div class="main">
         <div class="box">
@@ -26,7 +26,7 @@
                 <input type="password" id="confirm_password" name="confirm_password" required>
 
                 <button class="submit" type="submit">Signup</button>
-                <p class="login">Already have an account? <a href="../index.html">Login</a></p>
+                <p class="login">Already have an account? <a href="index.html">Login</a></p>
             </form>
         </div>
     </div>
@@ -61,13 +61,13 @@
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                     // Redirect to login page after successful sign-up
-                    window.location.href = '../index.html'; // Redirect to login page
+                    window.location.href = 'index.html'; // Redirect to login page
                     })
                     .catch((error) => {
                     alert(error.message);
                     });
             });1
         </script>
-    <script type="module" src="/script/signup.js"></script>
+    <script type="module" src="script/signup.js"></script>
 </body>
 </html>

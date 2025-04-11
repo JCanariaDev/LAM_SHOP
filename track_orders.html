@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/index.css">
-    <title>Home</title>
-    <!-- index.html -->
+    <link rel="stylesheet" href="css/track.css">
+    <title>Track Orders</title>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -26,51 +26,51 @@
         const userInfo = document.getElementById('user-info');
 
         // Firebase listener for auth state
-        onAuthStateChanged(auth, (user) => {
+        /*onAuthStateChanged(auth, (user) => {
             if (user) {
-                userInfo.textContent = `Logged in as: ${user.email}`;
+                //userInfo.textContent = `Logged in as: ${user.email}`;
+                localStorage.setItem("userEmail", user.email);
             } else {
                 // If no user, redirect to login
-                window.location.href = '../index.html';
+                window.location.href = 'login.html';
             }
-        });
+        });*/
 
         const logoutBtn = document.getElementById('logout');
         logoutBtn.addEventListener('click', () => {
             import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
             const auth = getAuth();
             signOut(auth).then(() => {
-                window.location.href = '../index.html';
+                window.location.href = 'index.html';
             });
             });
         });
     </script>
-
-
+    
 </head>
 <body>
-    <header>     
-        <h2 class="name"><img src="/images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
+    <header>
+        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
         <nav>
-            <a href="">Home</a>
-            <a href="/html/products.html">Products</a>
-            <a href="/html/cart.html">Cart</a>
-            <a href="/html/track_orders.html">Track Orders</a>
-            <a href="/html/about.html">About</a>
-            <a style="text-decoration: none; margin: 0px;" href="/html/orders.html">
-                <img class="cart_icon" width="30px" height="30vh" src="/images/s1.png" alt="Cart Icon">
+            <a href="home.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">Cart</a>
+            <a href="">Track Orders</a>
+            <a href="about.html">About</a>
+            <a style="text-decoration: none; margin: 0px;" href="cart.html">
+                <img class="cart_icon" width="30px" height="30vh" src="images/s1.png" alt="Cart Icon">
             </a>
             <h1 style="display: inline;" class="js-cart-quantity"> 0</h1>
-            <img width="20px" height="20px" class="remove" src="/images/t1.png"my_logo alt="Remove Item">
+            <img width="20px" height="20px" class="remove" src="images/t1.png"my_logo alt="Remove Item">
             <button id="logout">Logout</button>
         </nav>
     </header>
+    <h1 class="your_orders" style="visibility: block; text-align: center;">Track Your Orders</h1>
     <div class="main">
         <div class="content">
-            <h1 style="text-align: center;">Welcome <span id="user-info">User Name</span> to Lam Shop!</h1>
-            <p>Discover the finest selection of authentic Lambanog, crafted with tradition and passion. Experience the unique flavors of the Philippines in every sip!</p>
+           
         </div>
     </div>
-    <script type="module" src="/script/index.js"></script>
+    <script type="module" src="script/track.js"></script>
 </body>
 </html>

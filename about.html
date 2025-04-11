@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/about.css">
+    <link rel="stylesheet" href="css/about.css">
     <title>About</title>
 
     <script type="module">
@@ -32,7 +32,7 @@
                 localStorage.setItem("userEmail", user.email);
             } else {
                 // If no user, redirect to login
-                window.location.href = '../index.html';
+                window.location.href = 'index.html';
             }
         });
 
@@ -41,7 +41,7 @@
             import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
             const auth = getAuth();
             signOut(auth).then(() => {
-                window.location.href = '../index.html';
+                window.location.href = 'index.html';
             });
             });
         });
@@ -50,18 +50,18 @@
 </head>
 <body>
     <header>
-        <h2 class="name"><img src="/images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
+        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
         <nav>
-            <a href="/html/home.html">Home</a>
-            <a href="/html/products.html">Products</a>
-            <a href="/html/cart.html">Cart</a>
-            <a href="/html/track_orders.html">Track Orders</a>
+            <a href="home.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">Cart</a>
+            <a href="track_orders.html">Track Orders</a>
             <a href="">About</a>
-            <a style="text-decoration: none; margin: 0px;" href="/html/orders.html">
-                <img class="cart_icon" w    idth="30px" height="30vh" src="/images/s1.png" alt="Cart Icon">
+            <a style="text-decoration: none; margin: 0px;" href="cart.html">
+                <img class="cart_icon" w    idth="30px" height="30vh" src="images/s1.png" alt="Cart Icon">
             </a>
             <h1 style="display: inline;" class="js-cart-quantity"> 0</h1>
-            <img width="20px" height="20px" class="remove" src="/images/t1.png"my_logo alt="Remove Item">
+            <img width="20px" height="20px" class="remove" src="images/t1.png"my_logo alt="Remove Item">
             <button id="logout">Logout</button>
         </nav>
     </header>
@@ -73,6 +73,6 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
     </div>
-    <script type="module" src="/script/about.js"></script>
+    <script type="module" src="script/about.js"></script>
 </body>
 </html>
