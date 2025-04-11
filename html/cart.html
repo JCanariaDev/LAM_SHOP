@@ -32,7 +32,7 @@
                 localStorage.setItem("userEmail", user.email);
             } else {
                 // If no user, redirect to login
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         });
 
@@ -41,7 +41,7 @@
             import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
             const auth = getAuth();
             signOut(auth).then(() => {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             });
             });
         });
@@ -52,7 +52,7 @@
     <header>
         <h2 class="name"><img src="/images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
         <nav>
-            <a href="/html/index.html">Home</a>
+            <a href="/html/home.html">Home</a>
             <a href="/html/products.html">Products</a>
             <a href="">Cart</a>
             <a href="/html/track_orders.html">Track Orders</a>

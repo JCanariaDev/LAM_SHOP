@@ -26,7 +26,7 @@
                 <input type="password" id="confirm_password" name="confirm_password" required>
 
                 <button class="submit" type="submit">Signup</button>
-                <p class="login">Already have an account? <a href="login.html">Login</a></p>
+                <p class="login">Already have an account? <a href="index.html">Login</a></p>
             </form>
         </div>
     </div>
@@ -61,12 +61,12 @@
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                     // Redirect to login page after successful sign-up
-                    window.location.href = 'login.html'; // Redirect to login page
+                    window.location.href = 'index.html'; // Redirect to login page
                     })
                     .catch((error) => {
                     alert(error.message);
                     });
-            });
+            });1
         </script>
     <script type="module" src="/script/signup.js"></script>
 </body>

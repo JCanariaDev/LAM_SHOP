@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/about.css">
-    <title>About</title>
-
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Home</title>
+    <!-- index.html -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -28,8 +28,7 @@
         // Firebase listener for auth state
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                //userInfo.textContent = `Logged in as: ${user.email}`;
-                localStorage.setItem("userEmail", user.email);
+                userInfo.textContent = `Logged in as: ${user.email}`;
             } else {
                 // If no user, redirect to login
                 window.location.href = 'index.html';
@@ -46,17 +45,18 @@
             });
         });
     </script>
-    
+
+
 </head>
 <body>
-    <header>
+    <header>     
         <h2 class="name"><img src="/images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
         <nav>
-            <a href="/html/home.html">Home</a>
+            <a href="">Home</a>
             <a href="/html/products.html">Products</a>
             <a href="/html/cart.html">Cart</a>
             <a href="/html/track_orders.html">Track Orders</a>
-            <a href="">About</a>
+            <a href="/html/about.html">About</a>
             <a style="text-decoration: none; margin: 0px;" href="/html/orders.html">
                 <img class="cart_icon" width="30px" height="30vh" src="/images/s1.png" alt="Cart Icon">
             </a>
@@ -67,12 +67,10 @@
     </header>
     <div class="main">
         <div class="content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultricies, justo nec tincidunt tincidunt, elit odio euismod sapien, non accumsan lorem nunc id arcu. Integer id augue nec magna dapibus facilisis. Fusce auctor, mauris at vulputate tempus, purus sem tincidunt nisi, vel vehicula nulla ipsum eget leo. Donec vel quam eu justo consectetur dictum nec in nunc. Phasellus vel sodales turpis. Proin malesuada felis nec enim facilisis, ut malesuada nisi hendrerit.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultricies, justo nec tincidunt tincidunt, elit odio euismod sapien, non accumsan lorem nunc id arcu. Integer id augue nec magna dapibus facilisis. Fusce auctor, mauris at vulputate tempus, purus sem tincidunt nisi, vel vehicula nulla ipsum eget leo. Donec vel quam eu justo consectetur dictum nec in nunc. Phasellus vel sodales turpis. Proin malesuada felis nec enim facilisis, ut malesuada nisi hendrerit.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultricies, justo nec tincidunt tincidunt, elit odio euismod sapien, non accumsan lorem nunc id arcu. Integer id augue nec magna dapibus facilisis. Fusce auctor, mauris at vulputate tempus, purus sem tincidunt nisi, vel vehicula nulla ipsum eget leo. Donec vel quam eu justo consectetur dictum nec in nunc. Phasellus vel sodales turpis. Proin malesuada felis nec enim facilisis, ut malesuada nisi hendrerit.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <h1 style="text-align: center;">Welcome <span id="user-info">User Name</span> to Lam Shop!</h1>
+            <p>Discover the finest selection of authentic Lambanog, crafted with tradition and passion. Experience the unique flavors of the Philippines in every sip!</p>
         </div>
     </div>
-    <script type="module" src="/script/about.js"></script>
+    <script type="module" src="/script/index.js"></script>
 </body>
 </html>
