@@ -32,7 +32,7 @@
                 localStorage.setItem("userEmail", user.email);
             } else {
                 // If no user, redirect to login
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             }
         });
 
@@ -41,7 +41,7 @@
             import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
             const auth = getAuth();
             signOut(auth).then(() => {
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             });
             });
         });
@@ -58,7 +58,7 @@
             <a href="/html/track_orders.html">Track Orders</a>
             <a href="">About</a>
             <a style="text-decoration: none; margin: 0px;" href="/html/orders.html">
-                <img class="cart_icon" width="30px" height="30vh" src="/images/s1.png" alt="Cart Icon">
+                <img class="cart_icon" w    idth="30px" height="30vh" src="/images/s1.png" alt="Cart Icon">
             </a>
             <h1 style="display: inline;" class="js-cart-quantity"> 0</h1>
             <img width="20px" height="20px" class="remove" src="/images/t1.png"my_logo alt="Remove Item">
