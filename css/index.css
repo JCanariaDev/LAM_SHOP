@@ -67,3 +67,12 @@ nav a.active{
     background: transparent;
     border: none;
 }
+.content{
+    display: inline;
+    width: 40%;
+    background-color: transparent;
+    backdrop-filter: blur(25px);
+    border-radius: 3%;
+    padding: 35px;
+    box-shadow: 0 0 8px #07e729;
+}

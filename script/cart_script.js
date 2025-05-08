@@ -3,11 +3,6 @@ import { cart, saveToStorage } from './cart.js';
 import { db } from './firebase-config.js';
 import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-//import { showAlert } from './custom_alert/custom_alert.js';
-/*if (!sessionStorage.getItem("refreshed")) {
-    sessionStorage.setItem("refreshed", "true");
-    location.reload();
-}*/
 
 // Get the input values safely
 const nameElement = document.getElementById("inputName");
