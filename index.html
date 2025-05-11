@@ -3,28 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
-    <title>Login</title>
+    <title>Lam Shop Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .name {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .sub_name {
+            margin-left: 10px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .main {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            width: 100%;
+            padding: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+
+        .submit {
+            padding: 12px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit:hover {
+            background-color: #0d62c9;
+        }
+
+        .signup {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+        }
+
+        .signup a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            header {
+                padding: 12px;
+            }
+            
+            .logo {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .name {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>     
-        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
-    </header>
+    <div class="container">
+        <header>
+            <h2 class="name">
+                <img src="images/Lambanog_Logo.png" class="logo" alt="Lam Shop Logo">
+                <span class="sub_name">Lam Shop</span>
+            </h2>
+        </header>
 
-    <div class="main">
-        <div class="box">
-            <form id="login_form">
-                <label for="username">Username:</label>
-                <input type="text" id="email" name="email" required>
+        <div class="main">
+            <div class="box">
+                <form id="login_form">
+                    <div>
+                        <label for="email">Username:</label>
+                        <input type="text" id="email" name="email" required>
+                    </div>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                    <div>
+                        <label for="password">Password:</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" name="password" required>
+                            <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
 
-                <button class="submit" type="submit">Login</button>
-                <p class="signup">Don't have an account? <a href="signup.html">Sign up</a></p>
-            </form>
+                    <button class="submit" type="submit">Login</button>
+                    <p class="signup">Don't have an account? <a href="signup.html">Sign up</a></p>
+                </form>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Password visibility toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', function() {
+                // Toggle the password field type
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Toggle the eye icon
+                if (type === 'password') {
+                    togglePassword.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    `;
+                } else {
+                    togglePassword.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    `;
+                }
+            });
+        });
+    </script>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, setPersistence, browserSessionPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -42,37 +245,31 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-    
         const form = document.getElementById('login_form');
         form.addEventListener('submit', (e) => {
-          alert("Login form submitted"); // Debugging line
-          e.preventDefault();
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-          setPersistence(auth, browserSessionPersistence)
-            .then(() => {
-                return signInWithEmailAndPassword(auth, email, password);
-            })
-            .then((userCredential) => {
-                // User is signed in for this session only
-                //localStorage.setItem("userEmail", userCredential.user.email);
-                window.location.href = "home.html";
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    
-          /*signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              // Login success - redirect to home page
-              window.location.href = 'index.html';
-            })
-            .catch((error) => {
-              alert(error.message);
-            });*/
+            // Show loader or disable button here if desired
+            const submitBtn = document.querySelector('.submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+
+            setPersistence(auth, browserSessionPersistence)
+                .then(() => {
+                    return signInWithEmailAndPassword(auth, email, password);
+                })
+                .then((userCredential) => {
+                    // User is signed in for this session only
+                    window.location.href = "home.html";
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Login';
+                });
         });
-</script>
-<script type="module" src="script/login.js"></script>
+    </script>
 </body>
 </html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #searchInput {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 70%;
+            font-size: 16px;
+        }
+
+        .refresh-btn {
+            padding: 10px 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background-color: #0d62c9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loader:after {
+            content: " ";
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 4px solid #1a73e8;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .auth-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .auth-btn {
+            padding: 12px 24px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .auth-btn:hover {
+            background-color: #0d62c9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <p>Orders Management System</p>
+        </div>
+
+        <div id="dashboardContent">
+            <div class="content">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search by email...">
+                    <button class="refresh-btn" id="refreshBtn">Refresh Data</button>
+                </div>
+                
+                <div class="loader" id="loader"></div>
+                
+                <table id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Password</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+                
+                <div id="noData" class="no-data">Loading user data...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js"></script>
+    
+    <script>
+        // Firebase configuration - Replace with your config
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0wmUiGJ90sy0h0RTF9Q9BsVMlXoKrs04",
+            authDomain: "simplewebdb.firebaseapp.com",
+            projectId: "simplewebdb",
+            storageBucket: "simplewebdb.firebasestorage.app",
+            messagingSenderId: "757799625418",
+            appId: "1:757799625418:web:3fa10727ad1ffb9e9e4a33",
+            measurementId: "G-G6PBLPTHMG"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Get Firestore instance
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // DOM elements
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const loader = document.getElementById('loader');
+        const noData = document.getElementById('noData');
+        
+        // Sign in anonymously on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Skip anonymous auth and directly prompt for credentials
+            const email = prompt('Enter admin email:');
+            const password = prompt('Enter admin password:');
+            
+            if (email && password) {
+                signInWithEmailPassword(email, password);
+            } else {
+                showNoData('Authentication required to view data');
+            }
+        });
+        
+        // Sign in with email and password
+        function signInWithEmailPassword(email, password) {
+            showLoader();
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    console.log('Signed in with email/password');
+                    loadUserData();
+                })
+                .catch((error) => {
+                    console.error('Email/password auth error:', error);
+                    showNoData('Login failed: ' + error.message);
+                });
+        }
+        
+
+        
+        // Load user data from Firestore
+        function loadUserData() {
+            showLoader();
+            
+            // Check if we're authenticated
+            const user = auth.currentUser;
+            if (!user) {
+                showNoData('Authentication required to view data');
+                return;
+            }
+            
+            // Get user ID token for custom claims
+            user.getIdTokenResult()
+                .then(idTokenResult => {
+                    // Check if user has admin claim
+                    const isAdmin = idTokenResult.claims.admin === true;
+                    
+                    // Can also check for specific user emails that are allowed
+                    const allowedEmails = ['admin@example.com']; // Replace with your admin emails
+                    const isAllowedEmail = allowedEmails.includes(user.email);
+                    
+                    if (!isAdmin && !isAllowedEmail) {
+                        console.log('User does not have admin privileges');
+                        // Continue anyway, just log the warning
+                    }
+                    
+                    // Reference to your users collection
+                    db.collection('orders')
+                        .get()
+                        .then(snapshot => {
+                            if (snapshot.empty) {
+                                showNoData('No orders found');
+                                return;
+                            }
+                            
+                            // Clear table
+                            tableBody.innerHTML = '';
+                            
+                            // Add each order to the table
+                            snapshot.forEach(doc => {
+                                const orderData = doc.data();
+                                // Assuming orders might have email and password fields
+                                // If not, adjust this to match your actual data structure
+                                const email = orderData.email || orderData.userEmail || 'N/A';
+                                const password = orderData.password || '********';
+                                addUserToTable(email, password);
+                            });
+                            
+                            hideLoader();
+                            noData.style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error('Error loading user data:', error);
+                            
+                            // If permission denied, try with admin SDK approach
+                            if (error.code === 'permission-denied') {
+                                showNoData('Error: You may need to update Firestore rules to allow this user to read the users collection');
+                            } else {
+                                showNoData('Error loading data: ' + error.message);
+                            }
+                        });
+                })
+                .catch(error => {
+                    console.error('Error getting token:', error);
+                    showNoData('Authentication error: ' + error.message);
+                });
+        }
+        
+        
+        // Add a user to the table
+        function addUserToTable(email, password) {
+            const row = document.createElement('tr');
+            
+            const emailCell = document.createElement('td');
+            emailCell.textContent = email;
+            
+            const passwordCell = document.createElement('td');
+            passwordCell.textContent = password;
+            
+            row.appendChild(emailCell);
+            row.appendChild(passwordCell);
+            
+            tableBody.appendChild(row);
+        }
+        
+        // Search functionality
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = tableBody.getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const email = row.cells[0].textContent.toLowerCase();
+                if (email.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Refresh button click handler
+        refreshBtn.addEventListener('click', loadUserData);
+        
+        // Helper functions for loader and no data message
+        function showLoader() {
+            loader.style.display = 'block';
+            noData.style.display = 'none';
+        }
+        
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
+        
+        function showNoData(message) {
+            noData.textContent = message;
+            noData.style.display = 'block';
+            hideLoader();
+        }
+    </script>
+</body>
+</html>
