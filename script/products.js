@@ -1,106 +1,130 @@
-
 import { products } from './items.js';
 import { cart, addToCart } from './cart.js';
 
-
-document.querySelector(".remove").addEventListener('click', () => {
-    removeItems()
-})
-//------------
-renderProductsGrid()
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Render products grid first
+    renderProductsGrid();
+    
+    // Update cart quantity display
+    updateCartQuantity();
+    
+    // Add event listeners for adding and removing items
+    setupEventListeners();
+});
 
 function renderProductsGrid() {
+    const contentContainer = document.querySelector('.content');
+    if (!contentContainer) {
+        console.error('Content container not found');
+        return;
+    }
+    
     let productsHTML = '';
   
     products.forEach((product) => {
       productsHTML += `
-        <div class="product">
+        <div class="product" data-product-id="${product.id}">
             <div class="content_center">
-                <img src="${product.image}">     
-            </div>              
-            <p>Prices: ${product.priceCents}</p>
-            <p>Proof: ${product.proof}</p>
-            <p>Day of Stock: ${product.dayOfStock}</p>
-            <div class="add_minus">
-                <button class="minus" >-</button>
-                <h4 data-product-count="${product.id}" class="count" >0</h4>
-                <button class="add" >+</button>
+                <img src="${product.image}" alt="${product.name}">     
             </div>
-            <div class="last_row">
-                <button class="add_to_cart" data-product-id="${product.id}" >Add to Cart</button>
+            <div class="product-details">
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-price">₱${(product.priceCents / 100).toFixed(2)}</p>
+                    <p>Proof: ${product.proof}</p>
+                    <p>Day of Stock: ${product.dayOfStock}</p>
+                </div>
+                <div class="add_minus">
+                    <button class="minus">-</button>
+                    <h4 class="count" data-product-id="${product.id}">0</h4>
+                    <button class="add">+</button>
+                </div>
+                <div class="last_row">
+                    <button class="add_to_cart" data-product-id="${product.id}">Add to Cart</button>
+                </div>
             </div>         
         </div>
       `;
     });
   
-    document.querySelector('.content').innerHTML = productsHTML;
+    contentContainer.innerHTML = productsHTML;
+}
 
-    document.querySelectorAll('.add_to_cart')
-    .forEach((button) => {
-      button.addEventListener('click', () => {
-          const productId = button.dataset.productId;
-  
-          // Find the parent container for this specific product
-          const parent = button.closest('.product'); 
-          
-          // Get the count element within this specific product
-          const countElement = parent.querySelector('.count'); 
-          
-          // Parse the count from the count element
-          const productCount = parseInt(countElement.innerHTML.trim(), 10);
-  
-          // Call the addToCart function with the specific product ID and count
-          addToCart(productId, productCount);
-  
-          // Update the cart quantity display
-          updateCartQuantity();
-  
-          // Reset the count for this specific product
-          countElement.innerHTML = "0";
-      });
+function setupEventListeners() {
+    // Event listener for Add to Cart buttons
+    document.querySelectorAll('.add_to_cart').forEach((button) => {
+        button.addEventListener('click', () => {
+            const productId = button.dataset.productId;
+            const parent = button.closest('.product');
+            const countElement = parent.querySelector('.count');
+            const productCount = parseInt(countElement.innerHTML.trim(), 10);
+            
+            if (productCount > 0) {
+                addToCart(productId, productCount);
+                updateCartQuantity();
+                countElement.innerHTML = "0";
+                
+                // Show notification
+                showNotification("Item added to cart!");
+            } else {
+                showNotification("Please select a quantity first");
+            }
+        });
     });
-  
+    
+    // Event listeners for + buttons
+    document.querySelectorAll('.add').forEach((button) => {
+        button.addEventListener('click', () => {
+            const parent = button.closest('.product');
+            const countElement = parent.querySelector('.count');
+            const count = parseInt(countElement.innerHTML.trim(), 10);
+            countElement.innerHTML = count + 1;
+        });
+    });
+    
+    // Event listeners for - buttons
+    document.querySelectorAll('.minus').forEach((button) => {
+        button.addEventListener('click', () => {
+            const parent = button.closest('.product');
+            const countElement = parent.querySelector('.count');
+            const count = parseInt(countElement.innerHTML.trim(), 10);
+            if (count > 0) {
+                countElement.innerHTML = count - 1;
+            }
+        });
+    });
 }
 
 function updateCartQuantity() {
+    const cartQuantityElement = document.querySelector('.js-cart-quantity');
+    if (!cartQuantityElement) {
+        console.error('Cart quantity element not found');
+        return;
+    }
+    
     let cartQuantity = 0;
-
     cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
+        cartQuantity += cartItem.quantity;
     });
     
-    document.querySelector('.js-cart-quantity')
-      .innerHTML = cartQuantity;
-}
-function removeItems() {
-    localStorage.clear(); // Clear localStorage
-    cart.length = 0; // Clear the in-memory cart array
-    updateCartQuantity(); // Update the cart quantity display
+    cartQuantityElement.innerHTML = cartQuantity;
 }
 
-updateCartQuantity()
+function showNotification(message) {
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notification-message');
+    
+    if (notification && notificationMessage) {
+        notificationMessage.textContent = message;
+        notification.classList.add('show');
+        
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+}
 
-const buttons_add = document.querySelectorAll('.add');
-// Loop through each button and attach the event listener
-buttons_add.forEach((button) => {
-    button.addEventListener('click', (event) => {
-        const parent = button.closest('.product'); // Find the parent product container
-        const countElement = parent.querySelector('.count'); // Find the count element within this product
-        const count = parseInt(countElement.innerHTML.trim(), 10); // Get the current count
-        countElement.innerHTML = count + 1; // Increment the count
-    });
-});
-
-const buttons_minus = document.querySelectorAll('.minus');
-// Loop through each button and attach the event listener
-buttons_minus.forEach((button) => {
-    button.addEventListener('click', (event) => {
-        const parent = button.closest('.product'); // Find the parent product container
-        const countElement = parent.querySelector('.count'); // Find the count element within this product
-        const count = parseInt(countElement.innerHTML.trim(), 10); // Get the current count
-        if (count === 0){
-            return;
-        }
-        countElement.innerHTML = count - 1; // Decrement the count
-    });
-});
+// Export functions for external use
+export { updateCartQuantity };

@@ -3,9 +3,544 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/prodcuts.css">
-    <title>Products</title>
+    <title>Lam Shop - Products</title>
+    <style>
+        :root {
+            --primary-color: #008000;
+            --secondary-color: #006400;
+            --accent-color: #90ee90;
+            --text-color: #ffffff;
+            --text-dark: #333333;
+            --background-light: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand img {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--secondary-color);
+        }
+
+        .cart-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--warning-color);
+            color: var(--text-dark);
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #logout {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #logout:hover {
+            background-color: #c82333;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .products-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            text-align: center;
+            border-top: 5px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .products-header h1 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .products-header p {
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-weight: bold;
+        }
+
+        .filter-select {
+            padding: 8px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-input {
+            padding: 8px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .content_center {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .content_center img {
+            width: 50%;
+            height: 80%;
+            object-fit: cover;
+        }
+
+        .product-details {
+            padding: 15px;
+        }
+
+        .product-info {
+            margin-bottom: 15px;
+        }
+
+        .product-info p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .product-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+
+        .product-price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .add_minus {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .add_minus button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .add_minus button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .last_row {
+            text-align: center;
+        }
+
+        .add_to_cart {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .add_to_cart:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .brand {
+                margin-bottom: 10px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .filter-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-input {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                <img src="images/Lambanog_Logo.png" width="55px" height="55px" alt="Lam Shop Logo">
+                <span class="brand-name">Lam Shop</span>
+            </div>
+            <nav>
+                <a href="home.html">Home</a>
+                <a href="products.html" class="active">Products</a>
+                <a href="cart.html">Cart</a>
+                <a href="track_orders.html">Track Orders</a>
+                <a href="about.html">About</a>
+                <div class="cart-container">
+                    <a href="cart.html" class="cart-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-badge js-cart-quantity">0</span>
+                    </a>
+                </div>
+                <div class="user-controls">
+                    <button id="logout">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="products-header">
+            <h1>Our Lambanog Products</h1>
+            <p>Discover our selection of authentic Filipino Lambanog, crafted with tradition and quality.</p>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <span class="filter-label">Sort by:</span>
+                <select class="filter-select" id="sort-select">
+                    <option value="default">Default</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="new">Newest First</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Filter:</span>
+                <select class="filter-select" id="filter-select">
+                    <option value="all">All Products</option>
+                    <option value="high-proof">High Proof</option>
+                    <option value="flavored">Flavored</option>
+                    <option value="in-stock">In Stock</option>
+                </select>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search products...">
+                <button class="search-btn">Search</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Products will be dynamically loaded here by JavaScript -->
+        </div>
+    </div>
+
+    <div class="toast" id="notification">
+        <span id="notification-message">Item added to cart!</span>
+        <button class="toast-close" id="close-notification">×</button>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Lam Shop</h3>
+                <p>Authentic Filipino Lambanog, crafted with tradition and passion since 2010.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="track_orders.html">Track Orders</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@lamshop.com</p>
+                <p>Phone: +63 912 345 6789</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lam Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
     <script type="module">
+        // Firebase configuration
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
@@ -22,52 +557,68 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        const userInfo = document.getElementById('user-info');
-
         // Firebase listener for auth state
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                //userInfo.textContent = `Logged in as: ${user.email}`;
-                localStorage.setItem("userEmail", user.email);
+                // User is signed in
+                console.log("User is signed in:", user.email);
             } else {
                 // If no user, redirect to login
                 window.location.href = 'index.html';
             }
         });
 
+        // Logout functionality
         const logoutBtn = document.getElementById('logout');
         logoutBtn.addEventListener('click', () => {
-            import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
-            const auth = getAuth();
             signOut(auth).then(() => {
                 window.location.href = 'index.html';
-            });
+            }).catch((error) => {
+                console.error("Logout error:", error);
             });
         });
+
+        // Notification functionality
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const closeNotification = document.getElementById('close-notification');
+
+        closeNotification.addEventListener('click', () => {
+            notification.classList.remove('show');
+        });
+
+        // Search functionality
+        const searchBtn = document.querySelector('.search-btn');
+        const searchInput = document.querySelector('.search-input');
+        
+        searchBtn.addEventListener('click', () => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            if (searchTerm) {
+                showNotification(`Searching for: ${searchTerm}`);
+                // In a real app, you would filter products based on search term
+            }
+        });
+
+        // Filter functionality
+        const filterSelect = document.querySelectorAll('.filter-select');
+        filterSelect.forEach(select => {
+            select.addEventListener('change', () => {
+                const filterType = select.options[select.selectedIndex].text;
+                showNotification(`Filter applied: ${filterType}`);
+                // In a real app, you would filter products based on selection
+            });
+        });
+
+        function showNotification(message) {
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
     </script>
-</head>
-<body>
-     <header>
-        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>           
-        <nav>
-            <a href="home.html">Home</a>
-            <a href="">Products</a>
-            <a href="cart.html">Cart</a>
-            <a href="track_orders.html">Track Orders</a>
-            <a href="about.html">About</a>
-            <a style="text-decoration: none; margin: 0px;" href="cart.html">
-                <img class="cart_icon" width="30px" height="30vh" src="images/s1.png" alt="Cart Icon">
-            </a>
-            <h1 style="display: inline;" class="js-cart-quantity"> 0</h1>
-            <img width="20px" height="20px" class="remove" src="images/t1.png"my_logo alt="Remove Item">
-            <button id="logout">Logout</button>
-        </nav>
-    </header>
-    
-    <div class="main">
-        <div class="content">
-        </div>  
-    </div>
     <script type="module" src="script/products.js"></script>
 </body>
 </html>
