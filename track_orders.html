@@ -26,7 +26,7 @@
         const userInfo = document.getElementById('user-info');
 
         // Firebase listener for auth state
-        /*onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 //userInfo.textContent = `Logged in as: ${user.email}`;
                 localStorage.setItem("userEmail", user.email);
@@ -34,7 +34,7 @@
                 // If no user, redirect to login
                 window.location.href = 'login.html';
             }
-        });*/
+        });
 
         const logoutBtn = document.getElementById('logout');
         logoutBtn.addEventListener('click', () => {
