@@ -31,7 +31,7 @@ function renderProductsGrid() {
             <div class="product-details">
                 <div class="product-info">
                     <h3 class="product-title">${product.name}</h3>
-                    <p class="product-price">₱${(product.priceCents / 100).toFixed(2)}</p>
+                    <p class="product-price">₱${product.priceCents}</p>
                     <p>Proof: ${product.proof}</p>
                     <p>Day of Stock: ${product.dayOfStock}</p>
                 </div>

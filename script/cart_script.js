@@ -3,7 +3,6 @@ import { cart, saveToStorage } from './cart.js';
 import { db } from './firebase-config.js';
 import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-
 // Get the input values safely
 const nameElement = document.getElementById("inputName");
 const addressElement = document.getElementById("inputAddress");
@@ -17,36 +16,47 @@ document.querySelector(".remove").addEventListener('click', () => {
 renderCart();
 
 function renderCart() {
-    
     let cartHTML = '';
-  
-    cart.forEach((cartItem) => {
-        const product = products.find((p) => p.id === cartItem.productId);
-        //const product = products.find((p) => p.id === cartItem.productId);
-        
-        if (product) {
-            cartHTML += `
-                <div class="product">
-                    <div class="content_center">
-                        <img src="${product.image}">     
-                    </div>              
-                    <h3 id="name">${product.name}</h3>
-                    <p id="price">Price: ${product.priceCents * cartItem.quantity}</p>
-                    <p id="proof">Proof: ${product.proof}</p>
-                    <p id="dayOfStock">Day of Stock: ${product.dayOfStock}</p>
-                    <div class="add_minus">
-                        <button class="minus" data-product-id="${product.id}">-</button>
-                        <h4 data-product-count="${product.id}" id="count" class="count">${cartItem.quantity}</h4>
-                        <button class="add" data-product-id="${product.id}">+</button>
+    
+    // Check if cart is empty
+    if (cart.length === 0) {
+        cartHTML = `
+            <div class="empty-cart" style="grid-column: 1 / -1;">
+                <h2>Your cart is empty</h2>
+                <p>Add some products to your cart to get started.</p>
+                <a href="products.html" class="continue-shopping">Continue Shopping</a>
+            </div>
+        `;
+    } else {
+        cart.forEach((cartItem) => {
+            const product = products.find((p) => p.id === cartItem.productId);
+            
+            if (product) {
+                cartHTML += `
+                    <div class="product">
+                        <div class="content_center">
+                            <img src="${product.image}" alt="${product.name}">     
+                        </div>
+                        <div class="product-details">
+                            <h3 id="name">${product.name}</h3>
+                           <p id="price">₱${product.priceCents * cartItem.quantity}</p>
+                            <p id="proof">Proof: ${product.proof}</p>
+                            <p id="dayOfStock">Day of Stock: ${product.dayOfStock}</p>
+                            <div class="add_minus">
+                                <button class="minus" data-product-id="${product.id}">-</button>
+                                <h4 data-product-count="${product.id}" id="count" class="count">${cartItem.quantity}</h4>
+                                <button class="add" data-product-id="${product.id}">+</button>
+                            </div>
+                            <div class="last_row">
+                                <button class="remove_from_cart" data-product-id="${product.id}">Remove</button>
+                                <button class="buy" data-product-id="${product.id}">Buy Now</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="last_row">
-                        <button class="remove_from_cart" data-product-id="${product.id}">Remove</button>
-                        <button class="buy" data-product-id="${product.id}">Buy</button>
-                    </div>         
-                </div>
-            `;
-        }
-    });
+                `;
+            }
+        });
+    }
 
     document.querySelector('.content').innerHTML = cartHTML;
 
@@ -66,7 +76,6 @@ function attachEventListeners() {
                 renderCart(); // Re-render the cart
             }
             saveToStorage();
-            //location.reload();
         });
     });
 
@@ -82,7 +91,6 @@ function attachEventListeners() {
                 removeFromCart(productId); // Remove item if quantity is 0
             }
             saveToStorage();
-            //location.reload();
         });
     });
 
@@ -92,7 +100,13 @@ function attachEventListeners() {
             const productId = button.dataset.productId;
             removeFromCart(productId); // Remove the item
             saveToStorage();
-            //location.reload();
+        });
+    });
+
+    // Buy button event listeners
+    document.querySelectorAll('.buy').forEach((button) => {
+        button.addEventListener('click', () => {
+            showBuyPopup(button);
         });
     });
 }
@@ -102,13 +116,14 @@ function removeFromCart(productId) {
     if (index !== -1) {
         cart.splice(index, 1);
         renderCart(); // Re-render the cart
-        location.reload();
     }
 }
+
 function removeItems() {
-    localStorage.clear(); // Clear localStorage 
-    cart.length = 0; // Clear the in-memory cart array 
-    updateCartQuantity(); // Update the cart quantity display
+    // Clear the cart array and save to storage
+    cart.length = 0;
+    saveToStorage();
+    updateCartQuantity();
 }
 
 function updateCartQuantity() {
@@ -124,60 +139,66 @@ function updateCartQuantity() {
 let choosenBuy = [];
 
 // Get elements
-const buyButton = document.querySelectorAll('.buy');
 const popupForm = document.getElementById('popupForm');
 const closeButton = document.querySelector('.close');
 
-// Show the popup when the "Buy" button is clicked
-buyButton.forEach((button) => {
-    button.addEventListener('click', () => {
-        popupForm.style.display = "flex"; // Display the popup as a flex container
-        const parent = button.closest('.product');
-        const productId = parent.querySelector('.buy').dataset.productId;
-        const name = parent.querySelector('#name').innerText.trim(); // Use querySelector for selecting elements inside parent
-        //const price = parent.querySelector('#price').innerText.trim(); // Use querySelector
-        const price = parent.querySelector('#price').innerText.trim().replace('Price: ', ''); // Remove 'Price: ' prefix
-        const count = parent.querySelector('#count').innerText.trim(); 
-        const proof = parent.querySelector('#proof').innerText.trim().replace('Proof: ', '');
-        const dayOfStock = parent.querySelector('#dayOfStock').innerText.trim().replace('Day of Stock: ', '');
-        choosenBuy.push({
-            id: productId,
-            name: name,
-            price: price, //this is a string
-            quantity: count
-        });
+function showBuyPopup(button) {
+    popupForm.style.display = "flex";
+    const parent = button.closest('.product');
+    const productId = button.dataset.productId;
+    const name = parent.querySelector('#name').innerText.trim();
+    const price = parent.querySelector('#price').innerText.trim().replace('₱', '');
+    const count = parent.querySelector('#count').innerText.trim();
+    const proof = parent.querySelector('#proof').innerText.trim().replace('Proof: ', '');
+    const dayOfStock = parent.querySelector('#dayOfStock').innerText.trim().replace('Day of Stock: ', '');
+    
+    choosenBuy = [{
+        id: productId,
+        name: name,
+        price: price,
+        quantity: count
+    }];
 
-        const selectedProduct = {
-            id: productId,
-            name: name,
-            price: price,
-            quantity: count,
-            cproof: proof,
-            cdayOfStock: dayOfStock
-        };
+    const selectedProduct = {
+        id: productId,
+        name: name,
+        price: price,
+        quantity: count,
+        cproof: proof,
+        cdayOfStock: dayOfStock
+    };
 
-        //document.querySelector('.id').innerText = choosenBuy.at(0).id;
-        //document.querySelector('.pName').innerText = "Name: " + choosenBuy.at(0).name;
-        document.querySelector('.pPrice').innerText = "Price: " + choosenBuy.at(0).price ;
-        document.querySelector('.pCount').innerText = "Quantity: " + choosenBuy.at(0).quantity;
+    document.querySelector('.pPrice').innerText = "Total Price: ₱" + price;
+    document.querySelector('.pCount').innerText = "Quantity: " + count;
 
-        
-        document.querySelector('#inputEmail').value = "" + localStorage.getItem('userEmail') + "";
+    // Use the stored email from Firebase auth
+    document.querySelector('#inputEmail').value = window.userEmail || "";
 
-        document.querySelector('#inputID').value = selectedProduct.id;
-        document.querySelector('#inputPName').value = selectedProduct.name;
-        document.querySelector('#inputPPrice').value = selectedProduct.price;
-        document.querySelector('#inputPCount').value = selectedProduct.quantity;
-        document.querySelector('#inputPProof').value = selectedProduct.cproof;
-        document.querySelector('#inputPDayOfStock').value = selectedProduct.cdayOfStock;
+    document.querySelector('#inputID').value = selectedProduct.id;
+    document.querySelector('#inputPName').value = selectedProduct.name;
+    document.querySelector('#inputPPrice').value = selectedProduct.price;
+    document.querySelector('#inputPCount').value = selectedProduct.quantity;
+    document.querySelector('#inputPProof').value = selectedProduct.cproof;
+    document.querySelector('#inputPDayOfStock').value = selectedProduct.cdayOfStock;
+}
 
-        choosenBuy.length = 0; // Clear the array after setting the input values
-
-        //removeFromCart(selectedProduct.id)
-
-    });
+// Close the popup when the "x" button is clicked
+closeButton.addEventListener("click", () => {
+    popupForm.style.display = "none";
+    nameElement.value = "";
+    addressElement.value = "";
 });
 
+// Close the popup when clicking outside the form
+window.addEventListener("click", (e) => {
+    if (e.target === popupForm) {
+        popupForm.style.display = "none";
+        nameElement.value = "";
+        addressElement.value = "";
+    }
+});
+
+// Handle delivery date radio buttons
 document.querySelectorAll('input[name="deliveryDate"]').forEach(radio => {
     radio.addEventListener('change', () => {
         const customDateInput = document.getElementById("customDate");
@@ -186,7 +207,7 @@ document.querySelectorAll('input[name="deliveryDate"]').forEach(radio => {
             customDateInput.disabled = false;
         } else {
             customDateInput.disabled = true;
-            customDateInput.value = ""; // Optionally clear the date
+            customDateInput.value = "";
         }
     });
 });
@@ -196,7 +217,7 @@ const orderForm = document.getElementById('myForm');
 
 // Add an event listener for form submission
 orderForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     // Collect form data
     const name = orderForm.elements['name'].value.trim();
@@ -204,15 +225,11 @@ orderForm.addEventListener('submit', async (event) => {
     const payment = orderForm.elements['payment'].value;
     const email = orderForm.elements['email'].value;
     const productID = orderForm.elements['inputID'].value;
-    //const productName = orderForm.elements['inputPName'].value;
+    const productName = orderForm.elements['inputPName'].value;
     const productPrice = orderForm.elements['inputPPrice'].value;
     const productCount = orderForm.elements['inputPCount'].value;
     const productProof = orderForm.elements['inputPProof'].value;
     const productDayOfStock = orderForm.elements['inputPDayOfStock'].value;
-
-    /*const deliveryDate = orderForm.elements['deliveryDate'].value;
-    const deliveryTime = orderForm.elements['deliveryTime'].value;
-    const deliveryMethod = orderForm.elements['deliveryMethod'].value;*/
 
     // Handle delivery date
     const selected = document.querySelector('input[name="deliveryDate"]:checked');
@@ -225,86 +242,158 @@ orderForm.addEventListener('submit', async (event) => {
                 deliveryDate = customDate;
             } else {
                 alert("Please choose a custom delivery date.");
-                return; // Stop submission
+                return;
             }
         } else {
             deliveryDate = selected.value;
         }
-    } else {
-        alert("Please select a delivery date.");
-        return; // Stop submission
     }
 
+    // Validate required fields
+    if (!name || !address || !email) {
+        alert("Please fill in all required fields.");
+        return;
+    }
 
+    // Create order object
+    const orderData = {
+        name,
+        email,
+        address, 
+        payment,
+        productID,    
+        productPrice,
+        productCount,
+        productProof,
+        productDayOfStock,
+        deliveryDate,
+        status: "Pending",
+        timestamp: new Date()
+    };
 
     try {
-        await addDoc(collection(db, "orders"), {
-            name,
-            email,
-            address, 
-            payment,
-            productID,    
-            productPrice,
-            productCount,
-            productProof,
-            productDayOfStock,
-            deliveryDate,
-            status: "Pending",
-            timestamp: new Date()
-        });
-        removeFromCart(productID); // Remove the item from the cart after placing the order
-        saveToStorage();
-        alert("Order placed!");
-        window.location.href = 'track_orders.html';
-    } catch (e) {
-    alert("Error placing order: " + e.message);
-    }
+        // Show loading state
+        const submitButton = document.querySelector('.submit');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = "Processing...";
+        submitButton.disabled = true;
 
-    /*try {
-        // Send the data to the server via POST in JSON format
-        const response = await fetch('http://localhost/LAM_WEBSITE/php/insert_order.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, address, payment, productID, productName, productPrice, productCount, productProof, productDayOfStock })
-        });
+        // Add order to Firebase
+        const docRef = await addDoc(collection(db, "orders"), orderData);
+        
+        console.log("Order added to Firebase with ID: ", docRef.id);
+        
+        // Show success message
+        document.getElementById('response').innerHTML = `
+            <div style="color: green; margin-top: 10px; padding: 10px; background-color: #e8f5e8; border-radius: 5px;">
+                <strong>Order placed successfully!</strong><br>
+                Order ID: ${docRef.id}<br>
+                You will receive a confirmation email shortly.
+            </div>
+        `;
 
-        if (!response.ok) {
-            throw new Error(`Server Error: ${response.status}`);
-        }
+        // Only remove the purchased item from cart AFTER successful Firebase submission
+        removeFromCart(productID);
+        saveToStorage(); // Make sure to save the updated cart
 
-        // Parse the JSON response
-        const result = await response.json();
-        //removeFromCart(productID);
+        // Reset form after successful submission
+        setTimeout(() => {
+            popupForm.style.display = "none";
+            orderForm.reset();
+            nameElement.value = "";
+            addressElement.value = "";
+            document.getElementById('response').innerHTML = "";
+            
+            // Reset submit button
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+            
+            // Reset delivery date radio buttons
+            document.getElementById("today").checked = true;
+            document.getElementById("customDate").disabled = true;
+            document.getElementById("customDate").value = "";
+        }, 3000);
 
-        // Handle the response
-        if (result.success) {
-            alert('Order placed successfully!');
-            window.location.href = 'track_orders.html';
-        } else {
-            alert(`Error: ${result.message}`);
-        }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
-    }*/
-});
+        console.error("Error adding order: ", error);
+        console.error("Error details:", error.code, error.message);
+        
+        // Show error message
+        document.getElementById('response').innerHTML = `
+            <div style="color: red; margin-top: 10px; padding: 10px; background-color: #ffe8e8; border-radius: 5px;">
+                <strong>Error placing order!</strong><br>
+                Error: ${error.message}<br>
+                Please try again later or contact support.
+            </div>
+        `;
 
+        // Reset submit button
+        const submitButton = document.querySelector('.submit');
+        submitButton.textContent = "Submit your Order";
+        submitButton.disabled = false;
 
-// Close the popup when the "x" button is clicked
-closeButton.addEventListener("click", () => {
-    popupForm.style.display = "none";
-        nameElement.value = ""
-        addressElement.value = ""
-      //location.reload();
-});
-
-// Close the popup when clicking outside the form
-window.addEventListener("click", (e) => {
-    if (e.target === popupForm) {
-        popupForm.style.display = "none";
-        nameElement.value = ""
-        addressElement.value = ""
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+            document.getElementById('response').innerHTML = "";
+        }, 5000);
     }
 });
+
+// Function to calculate total cart value (optional feature)
+function calculateCartTotal() {
+    let total = 0;
+    cart.forEach((cartItem) => {
+        const product = products.find((p) => p.id === cartItem.productId);
+        if (product) {
+            total += (product.priceCents * cartItem.quantity) / 100;
+        }
+    });
+    return total.toFixed(2);
+}
+
+// Optional: Add a cart summary section
+function renderCartSummary() {
+    if (cart.length > 0) {
+        const total = calculateCartTotal();
+        const summaryHTML = `
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px;">
+                <h3 style="color: #006400; margin-bottom: 10px;">Cart Summary</h3>
+                <p style="font-size: 1.2rem; font-weight: bold;">Total: ₱${total}</p>
+                <button id="checkoutAll" style="width: 100%; padding: 12px; background-color: #008000; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer;">
+                    Checkout All Items
+                </button>
+            </div>
+        `;
+        
+        // Insert summary after the cart content
+        const mainContent = document.querySelector('.main');
+        let existingSummary = document.querySelector('.cart-summary');
+        
+        if (existingSummary) {
+            existingSummary.remove();
+        }
+        
+        if (cart.length > 0) {
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'cart-summary';
+            summaryDiv.innerHTML = summaryHTML;
+            mainContent.appendChild(summaryDiv);
+            
+            // Add event listener for checkout all button
+            document.getElementById('checkoutAll').addEventListener('click', () => {
+                alert('Checkout all functionality would be implemented here');
+                // This could open a bulk checkout form
+            });
+        }
+    }
+}
+
+// Update the renderCart function to include summary
+const originalRenderCart = renderCart;
+renderCart = function() {
+    originalRenderCart();
+    renderCartSummary();
+};
+
+// Initialize cart quantity on page load
+updateCartQuantity();
