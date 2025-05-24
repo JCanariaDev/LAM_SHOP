@@ -287,8 +287,7 @@ orderForm.addEventListener('submit', async (event) => {
         document.getElementById('response').innerHTML = `
             <div style="color: green; margin-top: 10px; padding: 10px; background-color: #e8f5e8; border-radius: 5px;">
                 <strong>Order placed successfully!</strong><br>
-                Order ID: ${docRef.id}<br>
-                You will receive a confirmation email shortly.
+                Order ID: ${docRef.id} You will receive a confirmation email shortly.
             </div>
         `;
 

@@ -2,6 +2,42 @@ import { cart } from './cart.js';
 import { products } from './items.js';
 import { db } from './firebase-config.js';
 import { collection, where, deleteDoc, updateDoc, addDoc, getDocs ,query, orderBy  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+// Move Firebase config and initialization to the top
+const firebaseConfig = {
+    apiKey: "AIzaSyA0wmUiGJ90sy0h0RTF9Q9BsVMlXoKrs04",
+    authDomain: "simplewebdb.firebaseapp.com",
+    projectId: "simplewebdb",
+    storageBucket: "simplewebdb.firebasestorage.app",
+    messagingSenderId: "757799625418",
+    appId: "1:757799625418:web:3fa10727ad1ffb9e9e4a33",
+    measurementId: "G-G6PBLPTHMG"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+let userEmail = null;
+
+// Set up authentication state listener
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        userEmail = user.email;
+        console.log('User email:', userEmail);
+        // Load orders only after we have the user email
+        await loadOrders();
+    } else {
+        userEmail = null;
+        console.log('No user logged in');
+        // Handle case when user is not logged in
+        const contentDiv = document.querySelector(".content");
+        if (contentDiv) {
+            contentDiv.innerHTML = "<p style='text-align: center;'>Please log in to view your orders.</p>";
+        }
+    }
+});
 
 updateCartQuantity();
 
@@ -14,7 +50,6 @@ function removeItems() {
     cart.length = 0; // Clear the in-memory cart array
     updateCartQuantity(); // Update the cart quantity display
 }
-
 
 function updateCartQuantity() {
     let cartQuantity = 0;
@@ -32,28 +67,22 @@ async function loadOrders() {
         const contentDiv = document.querySelector(".content");
         contentDiv.innerHTML = "<p style='text-align: center;'>Loading orders...</p>";
 
-        const userEmail = localStorage.getItem('userEmail');
-        
+        // Check if userEmail is available
+        if (!userEmail) {
+            contentDiv.innerHTML = "<p style='text-align: center;'>User not authenticated.</p>";
+            return;
+        }
+
         const q = query(
             collection(db, "orders"),
             where("email", "==", userEmail),  // Filter by email
             orderBy("timestamp", "desc")      // Order by timestamp
         );
-        //const q = query(collection(db, "orders"), orderBy("timestamp", "desc"));
+
         const querySnapshot = await getDocs(q);
 
         // Clear "Loading..." message now that we're done
         contentDiv.innerHTML = "";
-
-        //const querySnapshot = await getDocs(collection(db, "orders"));
-        const totalOrders = querySnapshot.size; // This gives the number of documents
-
-        /*contentDiv.innerHTML = ""; // Clear previous content
-
-        if (totalOrders === 0) {
-            contentDiv.innerHTML = "<p style='text-align: center;'>No orders found.</p>";
-            return;
-        }*/
 
         if (querySnapshot.empty) {
             contentDiv.innerHTML = "<p style='text-align: center;'>No orders found.</p>";
@@ -144,69 +173,5 @@ async function loadOrders() {
     }
 }
 
-async function initPage() {
-    await loadOrders();
-}
-
-document.addEventListener('DOMContentLoaded', initPage);
-
-
-/*document.addEventListener("DOMContentLoaded", async function () {
-    try {
-        const response = await fetch("http://localhost/LAM_WEBSITE/php/track.php", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Server Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Fetched data:", data); // Debugging statement
-
-        const contentDiv = document.querySelector(".content");
-        contentDiv.innerHTML = ""; // Clear previous content
-
-        if (data.length === 0) {
-            contentDiv.innerHTML = "<p>No orders found.</p>";
-            return;
-        }
-
-        let ordersHTML = '';
-
-        data.forEach((cartItem) => {
-            console.log("Processing cartItem:", cartItem); // Debugging statement
-            const product = products.find((p) => p.id === cartItem.product_id.toString());
-            console.log("Found product:", product); // Debugging statement
-
-            if (product) {
-                ordersHTML += `  
-                    <div class="product">
-                        <div class="content_center">
-                            <img src="${product.image}">     
-                        </div>              
-                        <p id="price">Price: ${cartItem.product_price}</p>
-                        <p>Proof: ${cartItem.proof}</p>
-                        <p>Day of Stock: ${cartItem.dayOfStock}</p>
-                        <p><strong>Quantity:</strong> ${cartItem.product_count}</p>
-                        <h3 id="status">Status: ${cartItem.status}</h3>
-                        <div class="last_row">
-                            <button class="cancel">Cancel</button>
-                            <button class="recieved">Recieved</button>
-                        </div>         
-                    </div>
-                `;
-            } else {
-                console.warn("Product not found for cartItem:", cartItem); // Debugging statement
-            }
-        });
-
-        document.querySelector('.content').innerHTML = ordersHTML;
-    } catch (error) {
-        console.error("Error fetching orders:", error);
-        alert("An error occurred while retrieving orders. Please try again later.");
-    }
-});*/
+// Remove the initPage function since we're now handling everything in onAuthStateChanged
+// document.addEventListener('DOMContentLoaded', initPage);

@@ -20,27 +20,14 @@
             measurementId: "G-G6PBLPTHMG"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        const userInfo = document.getElementById('user-info');
-
-        // Firebase listener for auth state
-        /*onAuthStateChanged(auth, (user) => {
-            if (user) {
-                //userInfo.textContent = `Logged in as: ${user.email}`;
-                localStorage.setItem("userEmail", user.email);
-            } else {
-                // If no user, redirect to login
-                window.location.href = 'login.html';
-            }
-        });*/
 
         const logoutBtn = document.getElementById('logout');
         logoutBtn.addEventListener('click', () => {
             import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
             const auth = getAuth();
             signOut(auth).then(() => {
+                localStorage.removeItem("userEmail");
+
                 window.location.href = 'index.html';
             });
             });
