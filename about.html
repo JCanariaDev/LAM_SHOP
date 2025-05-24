@@ -3,10 +3,483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/about.css">
-    <title>About</title>
+    <title>Lam Shop - About</title>
+    <style>
+        :root {
+            --primary-color: #008000;
+            --secondary-color: #006400;
+            --accent-color: #90ee90;
+            --text-color: #ffffff;
+            --text-dark: #333333;
+            --background-light: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand img {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--secondary-color);
+        }
+
+        .cart-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--warning-color);
+            color: var(--text-dark);
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #logout {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #logout:hover {
+            background-color: #c82333;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .about-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            text-align: center;
+            border-top: 5px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .about-header h1 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .about-header p {
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+        }
+
+        .content {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .about-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .about-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .about-section h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .about-section p {
+            color: var(--text-dark);
+            text-align: justify;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 3px solid var(--primary-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .brand {
+                margin-bottom: 10px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .about-header h1 {
+                font-size: 2rem;
+            }
+
+            .about-header p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                <img src="images/Lambanog_Logo.png" width="55px" height="55px" alt="Lam Shop Logo">
+                <span class="brand-name">Lam Shop</span>
+            </div>
+            <nav>
+                <a href="home.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="cart.html">Cart</a>
+                <a href="track_orders.html">Track Orders</a>
+                <a href="about.html" class="active">About</a>
+                <div class="cart-container">
+                    <a href="cart.html" class="cart-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-badge js-cart-quantity">0</span>
+                    </a>
+                </div>
+                <div class="user-controls">
+                    <button id="logout">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="about-header">
+            <h1>About Lam Shop</h1>
+            <p>Your premier destination for authentic Filipino Lambanog</p>
+        </div>
+        
+        <div class="content">
+            <div class="about-section">
+                <h2>Welcome to LamShop</h2>
+                <p>Welcome to LamShop for premium lambanog, where quality, convenience, and customer satisfaction come first. Our easy to use platform lets you explore and compare lambanog options based on price, stock freshness, and proof level, helping you find the perfect match for any occasion. Whether you're shopping for yourself or a gift, we make the process smooth, secure, and enjoyable from browsing to checkout. Experience the ease of buying authentic lambanog online fast, reliable, and delivered straight to your door.</p>
+            </div>
+
+            <div class="stats-section">
+                <h2>Why Choose Lam Shop?</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>100%</h3>
+                        <p>Authentic Products</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Customer Support</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Fast</h3>
+                        <p>Delivery Service</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Secure</h3>
+                        <p>Payment System</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍶</div>
+                    <h3>Premium Quality</h3>
+                    <p>We source only the finest lambanog from trusted distilleries, ensuring every bottle meets our high standards for purity and taste.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick and reliable delivery service that brings your favorite lambanog straight to your doorstep with care and efficiency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Secure Shopping</h3>
+                    <p>Shop with confidence using our secure payment system and protected checkout process for your peace of mind.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Easy to Use</h3>
+                    <p>Our user-friendly platform makes browsing, comparing, and purchasing lambanog simple and enjoyable for everyone.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Best Prices</h3>
+                    <p>Competitive pricing on all our products, with regular deals and discounts to give you the best value for your money.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Wide Selection</h3>
+                    <p>From traditional to flavored varieties, we offer a diverse range of lambanog options to suit every taste and occasion.</p>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Mission</h2>
+                <p>To preserve and promote the rich tradition of Filipino lambanog while making it accessible to everyone through modern e-commerce. We believe in connecting people with authentic Filipino culture through our carefully curated selection of premium lambanog products.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Story</h2>
+                <p>Founded with a passion for authentic Filipino spirits, Lam Shop has grown from a small local business to a trusted online destination for lambanog enthusiasts. We work directly with traditional distilleries to bring you the finest quality products while supporting local communities and preserving time-honored brewing techniques.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Lam Shop</h3>
+                <p>Authentic Filipino Lambanog, crafted with tradition and passion since then.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="track_orders.html">Track Orders</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@lamshop.com</p>
+                <p>Phone: +63 912 345 6789</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lam Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
 
     <script type="module">
+        // Firebase configuration
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
@@ -23,53 +496,27 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        const userInfo = document.getElementById('user-info');
-
         // Firebase listener for auth state
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                //userInfo.textContent = `Logged in as: ${user.email}`;
-                localStorage.setItem("userEmail", user.email);
+                // User is signed in
+                console.log("User is signed in:", user.email);
             } else {
                 // If no user, redirect to login
                 window.location.href = 'index.html';
             }
         });
 
+        // Logout functionality
         const logoutBtn = document.getElementById('logout');
         logoutBtn.addEventListener('click', () => {
-            import("https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js").then(({ getAuth, signOut }) => {
-            const auth = getAuth();
             signOut(auth).then(() => {
                 window.location.href = 'index.html';
-            });
+            }).catch((error) => {
+                console.error("Logout error:", error);
             });
         });
     </script>
-    
-</head>
-<body>
-    <header>
-        <h2 class="name"><img src="images/Lambanog_Logo.png" width="55px" height="55px" style="border-radius: 50%;" alt="This is my wallpaper"><span class="sub_name">&nbsp;Lam Shop</span></h2>      
-        <nav>
-            <a href="home.html">Home</a>
-            <a href="products.html">Products</a>
-            <a href="cart.html">Cart</a>
-            <a href="track_orders.html">Track Orders</a>
-            <a href="">About</a>
-            <a style="text-decoration: none; margin: 0px;" href="cart.html">
-                <img class="cart_icon" w    idth="30px" height="30vh" src="images/s1.png" alt="Cart Icon">
-            </a>
-            <h1 style="display: inline;" class="js-cart-quantity"> 0</h1>
-            <img width="20px" height="20px" class="remove" src="images/t1.png"my_logo alt="Remove Item">
-            <button id="logout">Logout</button>
-        </nav>
-    </header>
-    <div class="main">
-        <div class="content">
-            <h3 style="font-family: Arial, Helvetica, sans-serif; text-align: justify;">Welcome to LamShop for premium lambanog, where quality, convenience, and customer satisfaction come first. Our easy to use platform lets you explore and compare lambanog options based on price, stock freshness, and proof level, helping you find the perfect match for any occasion. Whether you're shopping for yourself or a gift, we make the process smooth, secure, and enjoyable from browsing to checkout. Experience the ease of buying authentic lambanog online fast, reliable, and delivered straight to your door.</h3>
-        </div>
-    </div>
     <script type="module" src="script/about.js"></script>
 </body>
 </html>
