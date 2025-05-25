@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Lam Shop - Admin Panel</title>
     <style>
+        :root {
+            --primary-color: #008000;
+            --secondary-color: #006400;
+            --accent-color: #90ee90;
+            --text-color: #ffffff;
+            --text-dark: #333333;
+            --background-light: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,174 +29,676 @@
 
         body {
             background-color: #f5f5f5;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
         header {
-            background-color: #1a73e8;
-            color: white;
-            padding: 20px;
-            text-align: center;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        h1 {
-            margin-bottom: 10px;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        #searchInput {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 70%;
-            font-size: 16px;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .refresh-btn {
-            padding: 10px 15px;
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
+        .brand img {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
             transition: background-color 0.3s;
         }
 
-        .refresh-btn:hover {
-            background-color: #0d62c9;
+        nav a:hover, nav a.active {
+            background-color: var(--secondary-color);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+        #logout {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
+        #logout:hover {
+            background-color: #c82333;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .admin-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            text-align: center;
+            border-top: 5px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .admin-header p {
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Order List Styles */
+        .order {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .order-header {
+            background-color: var(--background-light);
+            padding: 1rem;
             border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        th {
-            background-color: #f2f2f2;
+        .order-id {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .order-box {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+
+        .order-box h1 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .order-box img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .product-detail p,
+        .payment-detail h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .payment-detail h3 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status.processing {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.shipped {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status.delivered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--text-dark);
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 5px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            padding: 8px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            flex: 1;
+        }
+
+        .search-btn, .add-user-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-btn:hover, .add-user-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--secondary-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, 
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
             font-weight: bold;
         }
 
-        tr:hover {
-            background-color: #f5f5f5;
+        .modal-cancel {
+            background-color: #6c757d;
+            color: white;
         }
 
-        .loader {
-            text-align: center;
-            padding: 20px;
+        .modal-submit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .modal-cancel:hover {
+            background-color: #5a6268;
+        }
+
+        .modal-submit:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             display: none;
         }
 
-        .loader:after {
-            content: " ";
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 4px solid #1a73e8;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
+        /* User Management Section */
+        .user-management {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-top: 3rem;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .user-management h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
         }
 
-        .no-data {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-style: italic;
-        }
-
-        .auth-section {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .auth-btn {
-            padding: 12px 24px;
-            background-color: #1a73e8;
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
         }
 
-        .auth-btn:hover {
-            background-color: #0d62c9;
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .brand {
+                margin-bottom: 10px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .order-body {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Admin Dashboard</h1>
-            <p>Orders Management System</p>
-        </div>
-
-        <div id="dashboardContent">
-            <div class="content">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search by email...">
-                    <button class="refresh-btn" id="refreshBtn">Refresh Data</button>
-                </div>
-                
-                <div class="loader" id="loader"></div>
-                
-                <table id="userTable">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Password</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Data will be loaded here -->
-                    </tbody>
-                </table>
-                
-                <div id="noData" class="no-data">Loading user data...</div>
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                <img src="images/Lambanog_Logo.png" width="55px" height="55px" alt="Lam Shop Logo">
+                <span class="brand-name">Lam Shop</span>
             </div>
+            <nav>
+                <a href="admin_page.html" class="active">Orders</a>
+                <a href="#" id="showUsers">User Management</a>
+                <button id="logout">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <p>Manage all customer orders and user accounts</p>
+        </div>
+        
+        <!-- Orders Section -->
+        <div id="ordersSection">
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search orders...">
+                    <button class="search-btn" id="searchBtn">Search</button>
+                </div>
+                <button class="add-user-btn" id="addOrderBtn">Add New Order</button>
+            </div>
+            
+            <div id="ordersList">
+                <!-- Orders will be loaded here dynamically -->
+                <div class="loader" id="loader">Loading orders...</div>
+            </div>
+        </div>
+        
+        <!-- User Management Section (Initially hidden) -->
+        <div class="user-management" id="usersSection" style="display: none;">
+            <h2>User Management</h2>
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="userSearchInput" placeholder="Search users...">
+                    <button class="search-btn" id="userSearchBtn">Search</button>
+                </div>
+                <button class="add-user-btn" id="addUserBtn">Add New User</button>
+            </div>
+            
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>UID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- User data will be loaded here -->
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- Order Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Order</h2>
+                <button class="close-modal" id="closeOrderModal">&times;</button>
+            </div>
+            <form id="orderForm">
+                <input type="hidden" id="orderId">
+                
+                <div class="form-group">
+                    <label for="orderStatus">Status</label>
+                    <select id="orderStatus" required>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerEmail">Customer Email</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productPrice">Price</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderDate">Order Date</label>
+                    <input type="datetime-local" id="orderDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="shippingAddress">Shipping Address</label>
+                    <textarea id="shippingAddress" required></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn modal-cancel" id="cancelOrderBtn">Cancel</button>
+                    <button type="submit" class="modal-btn modal-submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle">Add New User</h2>
+                <button class="close-modal" id="closeUserModal">&times;</button>
+            </div>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" required>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn modal-cancel" id="cancelUserBtn">Cancel</button>
+                    <button type="submit" class="modal-btn modal-submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="notification">
+        <span id="notification-message">Operation successful</span>
+        <button class="toast-close" id="close-notification">&times;</button>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Lam Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
     <!-- Firebase SDK -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
     
     <script>
-        // Firebase configuration - Replace with your config
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyA0wmUiGJ90sy0h0RTF9Q9BsVMlXoKrs04",
             authDomain: "simplewebdb.firebaseapp.com",
@@ -194,164 +711,516 @@
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        
-        // Get Firestore instance
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const db = firebase.firestore();
         
         // DOM elements
-        const tableBody = document.getElementById('tableBody');
-        const searchInput = document.getElementById('searchInput');
-        const refreshBtn = document.getElementById('refreshBtn');
+        const logoutBtn = document.getElementById('logout');
+        const showUsersBtn = document.getElementById('showUsers');
+        const ordersSection = document.getElementById('ordersSection');
+        const usersSection = document.getElementById('usersSection');
+        const ordersList = document.getElementById('ordersList');
         const loader = document.getElementById('loader');
-        const noData = document.getElementById('noData');
         
-        // Sign in anonymously on page load
+        // Order modal elements
+        const orderModal = document.getElementById('orderModal');
+        const orderForm = document.getElementById('orderForm');
+        const orderIdInput = document.getElementById('orderId');
+        const orderStatusInput = document.getElementById('orderStatus');
+        const customerEmailInput = document.getElementById('customerEmail');
+        const productNameInput = document.getElementById('productName');
+        const productPriceInput = document.getElementById('productPrice');
+        const productQuantityInput = document.getElementById('productQuantity');
+        const orderDateInput = document.getElementById('orderDate');
+        const shippingAddressInput = document.getElementById('shippingAddress');
+        const closeOrderModal = document.getElementById('closeOrderModal');
+        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+        const addOrderBtn = document.getElementById('addOrderBtn');
+        
+        // User modal elements
+        const userModal = document.getElementById('userModal');
+        const userForm = document.getElementById('userForm');
+        const userIdInput = document.getElementById('userId');
+        const userEmailInput = document.getElementById('userEmail');
+        const userPasswordInput = document.getElementById('userPassword');
+        const closeUserModal = document.getElementById('closeUserModal');
+        const cancelUserBtn = document.getElementById('cancelUserBtn');
+        const addUserBtn = document.getElementById('addUserBtn');
+        
+        // Notification elements
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const closeNotification = document.getElementById('close-notification');
+        
+        // Current editing order
+        let currentEditOrder = null;
+        
+        // Check authentication on page load
         document.addEventListener('DOMContentLoaded', () => {
-            // Skip anonymous auth and directly prompt for credentials
-            const email = prompt('Enter admin email:');
-            const password = prompt('Enter admin password:');
-            
-            if (email && password) {
-                signInWithEmailPassword(email, password);
-            } else {
-                showNoData('Authentication required to view data');
-            }
-        });
-        
-        // Sign in with email and password
-        function signInWithEmailPassword(email, password) {
-            showLoader();
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    console.log('Signed in with email/password');
-                    loadUserData();
-                })
-                .catch((error) => {
-                    console.error('Email/password auth error:', error);
-                    showNoData('Login failed: ' + error.message);
-                });
-        }
-        
-
-        
-        // Load user data from Firestore
-        function loadUserData() {
-            showLoader();
-            
-            // Check if we're authenticated
-            const user = auth.currentUser;
-            if (!user) {
-                showNoData('Authentication required to view data');
-                return;
-            }
-            
-            // Get user ID token for custom claims
-            user.getIdTokenResult()
-                .then(idTokenResult => {
-                    // Check if user has admin claim
-                    const isAdmin = idTokenResult.claims.admin === true;
-                    
-                    // Can also check for specific user emails that are allowed
-                    const allowedEmails = ['admin@example.com']; // Replace with your admin emails
-                    const isAllowedEmail = allowedEmails.includes(user.email);
-                    
-                    if (!isAdmin && !isAllowedEmail) {
-                        console.log('User does not have admin privileges');
-                        // Continue anyway, just log the warning
-                    }
-                    
-                    // Reference to your users collection
-                    db.collection('orders')
-                        .get()
-                        .then(snapshot => {
-                            if (snapshot.empty) {
-                                showNoData('No orders found');
-                                return;
-                            }
-                            
-                            // Clear table
-                            tableBody.innerHTML = '';
-                            
-                            // Add each order to the table
-                            snapshot.forEach(doc => {
-                                const orderData = doc.data();
-                                // Assuming orders might have email and password fields
-                                // If not, adjust this to match your actual data structure
-                                const email = orderData.email || orderData.userEmail || 'N/A';
-                                const password = orderData.password || '********';
-                                addUserToTable(email, password);
-                            });
-                            
-                            hideLoader();
-                            noData.style.display = 'none';
-                        })
-                        .catch(error => {
-                            console.error('Error loading user data:', error);
-                            
-                            // If permission denied, try with admin SDK approach
-                            if (error.code === 'permission-denied') {
-                                showNoData('Error: You may need to update Firestore rules to allow this user to read the users collection');
-                            } else {
-                                showNoData('Error loading data: ' + error.message);
-                            }
-                        });
-                })
-                .catch(error => {
-                    console.error('Error getting token:', error);
-                    showNoData('Authentication error: ' + error.message);
-                });
-        }
-        
-        
-        // Add a user to the table
-        function addUserToTable(email, password) {
-            const row = document.createElement('tr');
-            
-            const emailCell = document.createElement('td');
-            emailCell.textContent = email;
-            
-            const passwordCell = document.createElement('td');
-            passwordCell.textContent = password;
-            
-            row.appendChild(emailCell);
-            row.appendChild(passwordCell);
-            
-            tableBody.appendChild(row);
-        }
-        
-        // Search functionality
-        searchInput.addEventListener('input', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            const rows = tableBody.getElementsByTagName('tr');
-            
-            Array.from(rows).forEach(row => {
-                const email = row.cells[0].textContent.toLowerCase();
-                if (email.includes(searchTerm)) {
-                    row.style.display = '';
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    // Not logged in, redirect to login page
+                    window.location.href = 'admin_login.html';
                 } else {
-                    row.style.display = 'none';
+                    // User is logged in, load data
+                    loadOrders();
                 }
             });
         });
         
-        // Refresh button click handler
-        refreshBtn.addEventListener('click', loadUserData);
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = 'admin_login.html';
+            }).catch(error => {
+                showNotification('Logout failed: ' + error.message, false);
+            });
+        });
         
-        // Helper functions for loader and no data message
+        // Toggle between orders and users sections
+        showUsersBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            ordersSection.style.display = 'none';
+            usersSection.style.display = 'block';
+            loadUsers();
+        });
+        
+        // Load orders from Firestore
+        function loadOrders() {
+            showLoader();
+            
+            db.collection('orders').get()
+                .then(querySnapshot => {
+                    ordersList.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        ordersList.innerHTML = '<div class="no-data">No orders found</div>';
+                        return;
+                    }
+                    
+                    querySnapshot.forEach(doc => {
+                        const order = doc.data();
+                        addOrderToDOM(order, doc.id);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading orders:', error);
+                    showNotification('Error loading orders: ' + error.message, false);
+                })
+                .finally(() => {
+                    hideLoader();
+                });
+        }
+        
+        // Add order to DOM
+        function addOrderToDOM(order, orderId) {
+            const orderElement = document.createElement('div');
+            orderElement.className = 'order';
+            orderElement.setAttribute('data-id', orderId);
+            
+            // Format date
+            const orderDate = order.orderDate ? new Date(order.orderDate.seconds * 1000) : new Date();
+            const formattedDate = orderDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Determine status class
+            const statusClass = order.status || 'pending';
+            
+            orderElement.innerHTML = `
+                <div class="order-header">
+                    <div>
+                        <span class="order-id">Order #${orderId}</span>
+                        <span class="status ${statusClass}">${statusClass}</span>
+                    </div>
+                    <div class="order-date">${formattedDate}</div>
+                </div>
+                <div class="order-body">
+                    <div class="order-box">
+                        <h1>Product Details</h1>
+                        <img src="${order.productImage || 'images/Lambanog_Logo.png'}" alt="Product Image">
+                        <div class="product-detail">
+                            <p><strong>Name:</strong> ${order.productName || 'N/A'}</p>
+                            <p><strong>Price:</strong> ₱${order.productPrice || '0.00'}</p>
+                            <p><strong>Quantity:</strong> ${order.productQuantity || '1'}</p>
+                        </div>
+                    </div>
+                    <div class="order-box">
+                        <h1>Payment Details</h1>
+                        <div class="payment-detail">
+                            <h3><strong>Customer:</strong> ${order.customerEmail || 'N/A'}</h3>
+                            <h3><strong>Total:</strong> ₱${(order.productPrice * order.productQuantity || 0).toFixed(2)}</h3>
+                            <h3><strong>Shipping Address:</strong></h3>
+                            <p>${order.shippingAddress || 'N/A'}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary edit-order-btn">Edit</button>
+                            <button class="btn btn-danger delete-order-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            ordersList.appendChild(orderElement);
+            
+            // Add event listeners to buttons
+            orderElement.querySelector('.edit-order-btn').addEventListener('click', () => openEditOrderModal(order, orderId));
+            orderElement.querySelector('.delete-order-btn').addEventListener('click', () => deleteOrder(orderId));
+        }
+        
+        // Open modal for editing order
+        function openEditOrderModal(order, orderId) {
+            currentEditOrder = { ...order, id: orderId };
+            
+            // Set modal title
+            document.getElementById('modalTitle').textContent = 'Edit Order';
+            
+            // Fill form with order data
+            orderIdInput.value = orderId;
+            orderStatusInput.value = order.status || 'pending';
+            customerEmailInput.value = order.customerEmail || '';
+            productNameInput.value = order.productName || '';
+            productPriceInput.value = order.productPrice || '';
+            productQuantityInput.value = order.productQuantity || 1;
+            
+            // Convert Firestore timestamp to datetime-local format
+            const orderDate = order.orderDate ? new Date(order.orderDate.seconds * 1000) : new Date();
+            const formattedDate = orderDate.toISOString().slice(0, 16);
+            orderDateInput.value = formattedDate;
+            
+            shippingAddressInput.value = order.shippingAddress || '';
+            
+            // Show modal
+            orderModal.style.display = 'flex';
+        }
+        
+        // Open modal for adding new order
+        addOrderBtn.addEventListener('click', () => {
+            currentEditOrder = null;
+            document.getElementById('modalTitle').textContent = 'Add New Order';
+            orderForm.reset();
+            orderModal.style.display = 'flex';
+        });
+        
+        // Close order modal
+        function closeOrderModalFunc() {
+            orderModal.style.display = 'none';
+        }
+        
+        closeOrderModal.addEventListener('click', closeOrderModalFunc);
+        cancelOrderBtn.addEventListener('click', closeOrderModalFunc);
+        
+        // Order form submission
+        orderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const orderData = {
+                status: orderStatusInput.value,
+                customerEmail: customerEmailInput.value,
+                productName: productNameInput.value,
+                productPrice: parseFloat(productPriceInput.value),
+                productQuantity: parseInt(productQuantityInput.value),
+                orderDate: new Date(orderDateInput.value),
+                shippingAddress: shippingAddressInput.value,
+                updatedAt: new Date()
+            };
+            
+            if (currentEditOrder) {
+                // Update existing order
+                updateOrder(currentEditOrder.id, orderData);
+            } else {
+                // Add new order
+                addOrder(orderData);
+            }
+        });
+        
+        // Add new order to Firestore
+        function addOrder(orderData) {
+            showLoader();
+            
+            db.collection('orders').add(orderData)
+                .then(() => {
+                    closeOrderModalFunc();
+                    loadOrders();
+                    showNotification('Order added successfully');
+                })
+                .catch(error => {
+                    console.error('Error adding order:', error);
+                    showNotification('Error adding order: ' + error.message, false);
+                })
+                .finally(() => {
+                    hideLoader();
+                });
+        }
+        
+        // Update order in Firestore
+        function updateOrder(orderId, orderData) {
+            showLoader();
+            
+            db.collection('orders').doc(orderId).update(orderData)
+                .then(() => {
+                    closeOrderModalFunc();
+                    loadOrders();
+                    showNotification('Order updated successfully');
+                })
+                .catch(error => {
+                    console.error('Error updating order:', error);
+                    showNotification('Error updating order: ' + error.message, false);
+                })
+                .finally(() => {
+                    hideLoader();
+                });
+        }
+        
+        // Delete order from Firestore
+        function deleteOrder(orderId) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                showLoader();
+                
+                db.collection('orders').doc(orderId).delete()
+                    .then(() => {
+                        loadOrders();
+                        showNotification('Order deleted successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error deleting order:', error);
+                        showNotification('Error deleting order: ' + error.message, false);
+                    })
+                    .finally(() => {
+                        hideLoader();
+                    });
+            }
+        }
+        
+        // Load users from Firebase Authentication
+        function loadUsers() {
+            showLoader();
+            
+            // Note: In a real app, you would need a Cloud Function to list users
+            // This is a simplified version for demo purposes
+            
+            // For now, we'll just show the current user
+            const currentUser = auth.currentUser;
+            const userTableBody = document.getElementById('userTableBody');
+            userTableBody.innerHTML = '';
+            
+            if (currentUser) {
+                addUserToTable(currentUser.uid, currentUser.email);
+            } else {
+                userTableBody.innerHTML = '<tr><td colspan="3" class="no-data">No users found</td></tr>';
+            }
+            
+            hideLoader();
+        }
+        
+        // Add user to table
+        function addUserToTable(uid, email) {
+            const row = document.createElement('tr');
+            row.setAttribute('data-id', uid);
+            
+            row.innerHTML = `
+                <td>${email}</td>
+                <td>${uid}</td>
+                <td>
+                    <button class="btn btn-warning edit-user-btn">Edit</button>
+                    <button class="btn btn-danger delete-user-btn">Delete</button>
+                </td>
+            `;
+            
+            document.getElementById('userTableBody').appendChild(row);
+            
+            // Add event listeners
+            row.querySelector('.edit-user-btn').addEventListener('click', () => openEditUserModal(uid, email));
+            row.querySelector('.delete-user-btn').addEventListener('click', () => deleteUser(uid));
+        }
+        
+        // Open modal for editing user
+        function openEditUserModal(uid, email) {
+            document.getElementById('userModalTitle').textContent = 'Edit User';
+            userIdInput.value = uid;
+            userEmailInput.value = email;
+            userPasswordInput.value = '';
+            userModal.style.display = 'flex';
+        }
+        
+        // Open modal for adding new user
+        addUserBtn.addEventListener('click', () => {
+            document.getElementById('userModalTitle').textContent = 'Add New User';
+            userForm.reset();
+            userIdInput.value = '';
+            userModal.style.display = 'flex';
+        });
+        
+        // Close user modal
+        function closeUserModalFunc() {
+            userModal.style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+        }
+        
+        closeUserModal.addEventListener('click', closeUserModalFunc);
+        cancelUserBtn.addEventListener('click', closeUserModalFunc);
+        
+        // User form submission
+        userForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = userEmailInput.value.trim();
+            const password = userPasswordInput.value.trim();
+            const userId = userIdInput.value;
+            
+            // Validate inputs
+            if (!validateEmail(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email';
+                document.getElementById('emailError').style.display = 'block';
+                return;
+            }
+            
+            if (!userId && password.length < 6) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
+                document.getElementById('passwordError').style.display = 'block';
+                return;
+            }
+            
+            if (userId) {
+                // Update existing user
+                updateUser(userId, email, password);
+            } else {
+                // Add new user
+                createUser(email, password);
+            }
+        });
+        
+        // Create new user
+        function createUser(email, password) {
+            showLoader();
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    closeUserModalFunc();
+                    loadUsers();
+                    showNotification('User created successfully');
+                })
+                .catch(error => {
+                    console.error('Error creating user:', error);
+                    showNotification('Error creating user: ' + error.message, false);
+                })
+                .finally(() => {
+                    hideLoader();
+                });
+        }
+        
+        // Update user
+        function updateUser(uid, email, password) {
+            showLoader();
+            
+            // Get the current user
+            const user = auth.currentUser;
+            
+            if (!user) {
+                showNotification('You must be logged in to update users', false);
+                hideLoader();
+                return;
+            }
+            
+            // For demo, we'll just update the email if it's the current user
+            if (user.uid === uid) {
+                const promises = [];
+                
+                if (email !== user.email) {
+                    promises.push(user.updateEmail(email));
+                }
+                
+                if (password) {
+                    promises.push(user.updatePassword(password));
+                }
+                
+                Promise.all(promises)
+                    .then(() => {
+                        closeUserModalFunc();
+                        loadUsers();
+                        showNotification('User updated successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error updating user:', error);
+                        showNotification('Error updating user: ' + error.message, false);
+                    })
+                    .finally(() => {
+                        hideLoader();
+                    });
+            } else {
+                // In a real app, you would need admin privileges to update other users
+                showNotification('You can only update your own account in this demo', false);
+                hideLoader();
+            }
+        }
+        
+        // Delete user
+        function deleteUser(uid) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                showLoader();
+                
+                // Get the current user
+                const user = auth.currentUser;
+                
+                if (!user) {
+                    showNotification('You must be logged in to delete users', false);
+                    hideLoader();
+                    return;
+                }
+                
+                // For demo, we'll just allow deleting the current user
+                if (user.uid === uid) {
+                    user.delete()
+                        .then(() => {
+                            showNotification('User deleted successfully');
+                            window.location.href = 'admin_login.html';
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user:', error);
+                            showNotification('Error deleting user: ' + error.message, false);
+                        })
+                        .finally(() => {
+                            hideLoader();
+                        });
+                } else {
+                    // In a real app, you would need admin privileges to delete other users
+                    showNotification('You can only delete your own account in this demo', false);
+                    hideLoader();
+                }
+            }
+        }
+        
+        // Helper functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
         function showLoader() {
             loader.style.display = 'block';
-            noData.style.display = 'none';
         }
         
         function hideLoader() {
             loader.style.display = 'none';
         }
         
-        function showNoData(message) {
-            noData.textContent = message;
-            noData.style.display = 'block';
-            hideLoader();
+        function showNotification(message, isSuccess = true) {
+            notification.style.backgroundColor = isSuccess ? 'var(--success-color)' : 'var(--danger-color)';
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            
+            closeNotification.addEventListener('click', () => {
+                notification.classList.remove('show');
+            });
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>
