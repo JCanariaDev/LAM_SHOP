@@ -407,6 +407,12 @@
             padding: 0 20px;
         }
 
+        .form-group input:disabled {
+            background-color: #f0f0f0;
+            color: #666;
+            cursor: not-allowed;
+        }
+
         /* Responsive styles */
         @media (max-width: 768px) {
             .header-container {
@@ -712,6 +718,9 @@
             productProofInput.value = product.proof || '';
             productDayOfStockInput.value = product.dayOfStock || '';
             
+            // Disable the product ID field for editing
+            productCustomIdInput.disabled = true;
+            
             // Reset error states
             idError.style.display = 'none';
             productCustomIdInput.style.borderColor = '#ddd';
@@ -725,6 +734,9 @@
             document.getElementById('modalTitle').textContent = 'Add New Product';
             productForm.reset();
             
+            // Enable the product ID field for new products
+            productCustomIdInput.disabled = false;
+            
             // Reset error states
             idError.style.display = 'none';
             productCustomIdInput.style.borderColor = '#ddd';
@@ -732,19 +744,8 @@
             productModal.style.display = 'flex';
         });
         
-        // Close product modal
-        function closeProductModalFunc() {
-            productModal.style.display = 'none';
-            // Reset error states
-            idError.style.display = 'none';
-            productCustomIdInput.style.borderColor = '#ddd';
-        }
-        
-        closeProductModal.addEventListener('click', closeProductModalFunc);
-        cancelProductBtn.addEventListener('click', closeProductModalFunc);
-        
-        // Product form submission
-        productForm.addEventListener('submit', (e) => {
+        // Product form submission - enhanced validation
+        productForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const customId = productCustomIdInput.value.trim();
@@ -755,11 +756,37 @@
                 return;
             }
             
-            if (checkProductIdExists(customId, true)) {
-                idError.style.display = 'block';
-                productCustomIdInput.style.borderColor = 'var(--danger-color)';
-                showNotification('This Product ID already exists. Please choose a different one.', false);
-                return;
+            // Only check for duplicate IDs when adding new products (not when editing)
+            if (!currentEditProduct) {
+                // Check if ID exists in our local cache first
+                if (existingProductIds.has(customId)) {
+                    idError.style.display = 'block';
+                    productCustomIdInput.style.borderColor = 'var(--danger-color)';
+                    showNotification('This Product ID already exists. Please choose a different one.', false);
+                    return;
+                }
+                
+                // Double-check with Firestore in case local cache is outdated
+                try {
+                    showLoader();
+                    const querySnapshot = await db.collection('all_products')
+                        .where('customId', '==', customId)
+                        .limit(1)
+                        .get();
+                    
+                    if (!querySnapshot.empty) {
+                        idError.style.display = 'block';
+                        productCustomIdInput.style.borderColor = 'var(--danger-color)';
+                        showNotification('This Product ID already exists. Please choose a different one.', false);
+                        hideLoader();
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking product ID:', error);
+                    showNotification('Error verifying product ID. Please try again.', false);
+                    hideLoader();
+                    return;
+                }
             }
             
             const productData = {
@@ -777,6 +804,17 @@
                 addProduct(productData);
             }
         });
+        
+        // Close product modal
+        function closeProductModalFunc() {
+            productModal.style.display = 'none';
+            // Reset error states
+            idError.style.display = 'none';
+            productCustomIdInput.style.borderColor = '#ddd';
+        }
+        
+        closeProductModal.addEventListener('click', closeProductModalFunc);
+        cancelProductBtn.addEventListener('click', closeProductModalFunc);
         
         // Add new product to Firestore
         function addProduct(productData) {
