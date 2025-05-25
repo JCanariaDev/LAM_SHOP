@@ -242,9 +242,9 @@ async function loadOrders() {
                                 <button class="cancel" ${['cancelled', 'delivered', 'recieved'].includes(data.status?.toLowerCase()) ? 'disabled' : ''}>
                                     ${data.status?.toLowerCase() === 'cancelled' ? 'Cancelled' : 'Cancel Order'}
                                 </button>
-                                <button class="recieved" ${['recieved', 'delivered'].includes(data.status?.toLowerCase()) ? 'disabled' : ''}>
-                                    ${['recieved', 'delivered'].includes(data.status?.toLowerCase()) ? 'Received' : 'Mark as Received'}
-                                </button>
+                                <button class="recieved" ${['recieved', 'delivered', 'cancelled'].includes(data.status?.toLowerCase()) ? 'disabled' : ''}>
+    ${['recieved', 'delivered'].includes(data.status?.toLowerCase()) ? 'Received' : 'Mark as Received'}
+</button>
                             </div>         
                         </div>
                     </div>
@@ -258,36 +258,43 @@ async function loadOrders() {
             const cancelButton = orderDiv.querySelector(".cancel");
             const recievedButton = orderDiv.querySelector(".recieved");
 
-            cancelButton?.addEventListener("click", async () => {
-                if (cancelButton.disabled) return;
-                
-                if (confirm("Are you sure you want to cancel this order?")) {
-                    try {
-                        cancelButton.disabled = true;
-                        cancelButton.textContent = "Cancelling...";
-                        
-                        await updateDoc(doc.ref, {
-                            status: "Cancelled",
-                            cancelledAt: new Date()
-                        });
-                        
-                        showNotification("✅ Order cancelled successfully!", "success");
-                        cancelButton.textContent = "Cancelled";
-                        
-                        // Update status display
-                        const statusElement = orderDiv.querySelector(".status");
-                        if (statusElement) {
-                            statusElement.textContent = "Cancelled";
-                            statusElement.className = "status cancelled";
-                        }
-                    } catch (error) {
-                        console.error("Error cancelling order:", error);
-                        showNotification("❌ Failed to cancel order", "error");
-                        cancelButton.disabled = false;
-                        cancelButton.textContent = "Cancel Order";
-                    }
-                }
+           cancelButton?.addEventListener("click", async () => {
+    if (cancelButton.disabled) return;
+    
+    if (confirm("Are you sure you want to cancel this order?")) {
+        try {
+            cancelButton.disabled = true;
+            cancelButton.textContent = "Cancelling...";
+            
+            await updateDoc(doc.ref, {
+                status: "Cancelled",
+                cancelledAt: new Date()
             });
+            
+            showNotification("✅ Order cancelled successfully!", "success");
+            cancelButton.textContent = "Cancelled";
+            
+            // Update status display
+            const statusElement = orderDiv.querySelector(".status");
+            if (statusElement) {
+                statusElement.textContent = "Cancelled";
+                statusElement.className = "status cancelled";
+            }
+
+            // NEW: Immediately disable and update the "Mark as Received" button
+            const recievedButton = orderDiv.querySelector(".recieved");
+            if (recievedButton) {
+                recievedButton.disabled = true;
+                recievedButton.textContent = "Received"; // Optional: Change text to match disabled state
+            }
+        } catch (error) {
+            console.error("Error cancelling order:", error);
+            showNotification("❌ Failed to cancel order", "error");
+            cancelButton.disabled = false;
+            cancelButton.textContent = "Cancel Order";
+        }
+    }
+});
 
             recievedButton?.addEventListener("click", async () => {
                 if (recievedButton.disabled) return;
