@@ -251,7 +251,7 @@ async function loadOrders() {
                                 <p><strong>Proof:</strong> ${data.productProof}%</p>
                                 <p><strong>Stock Date:</strong> ${data.productDayOfStock}</p>
                                 <p><strong>Quantity:</strong> ${data.productCount}</p>
-                                <p><strong>Total Amount:</strong> ₱${(parseFloat(data.productPrice) * parseInt(data.productCount)).toFixed(2)}</p>
+                                <p><strong>Total Amount:</strong> ₱${parseFloat(data.productPrice)}</p>
                             </div>
                         </div>
                         <div class="order-box">
@@ -302,7 +302,7 @@ async function loadOrders() {
                     }
                 });
 
-                recievedButton.addEventListener("click", async () => {
+                /*recievedButton.addEventListener("click", async () => {
                     if (recievedButton.disabled) return;
                     
                     if (confirm("Mark this order as received?")) {
@@ -330,7 +330,40 @@ async function loadOrders() {
                             recievedButton.textContent = "Mark as Received";
                         }
                     }
-                });
+                });*/
+
+                recievedButton.addEventListener("click", async () => {
+                if (recievedButton.disabled) return;
+                
+                if (confirm("Mark this order as received?")) {
+                    try {
+                        recievedButton.disabled = true;
+                        recievedButton.textContent = "Updating...";
+                        
+                        await updateDoc(doc.ref, {
+                            status: "Recieved"
+                        });
+                        showNotification("✅ Order marked as received!", "success");
+                        
+                        // Update UI immediately
+                        const statusBadge = orderDiv.querySelector(".status");
+                        if (statusBadge) {
+                            statusBadge.textContent = "Recieved";
+                            // Remove all status classes
+                            statusBadge.className = "status delivered"; // Use 'delivered' class since it has the same styling
+                        }
+                        
+                        recievedButton.textContent = "Received";
+                        cancelButton.disabled = true;
+                        cancelButton.textContent = "Cancelled";
+                    } catch (error) {
+                        console.error("Error updating status:", error);
+                        showNotification("❌ Failed to update status. Please try again.", "error");
+                        recievedButton.disabled = false;
+                        recievedButton.textContent = "Mark as Received";
+                    }
+                }
+            });
 
             } else {
                 console.warn("Product not found for cartItem:", data); // Debugging statement

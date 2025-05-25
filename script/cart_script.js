@@ -344,7 +344,7 @@ function calculateCartTotal() {
     cart.forEach((cartItem) => {
         const product = products.find((p) => p.id === cartItem.productId);
         if (product) {
-            total += (product.priceCents * cartItem.quantity) / 100;
+            total += (product.priceCents * cartItem.quantity);
         }
     });
     return total.toFixed(2);

@@ -129,157 +129,39 @@
             margin: 0 auto;
         }
 
-        /* Order List Styles */
-        .order {
+        /* Products Table Styles */
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
             background-color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            margin-bottom: 2rem;
             overflow: hidden;
         }
 
-        .order-header {
-            background-color: var(--background-light);
-            padding: 1rem;
+        .products-table th, 
+        .products-table td {
+            padding: 12px 15px;
+            text-align: left;
             border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .order-id {
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-
-        .order-date {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .order-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem;
-        }
-
-        .order-box {
-            background-color: #f9f9f9;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-        }
-
-        .order-box h1 {
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .order-box img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            margin-bottom: 1rem;
-        }
-
-        .product-detail p,
-        .payment-detail h3 {
-            margin-bottom: 0.5rem;
-            color: var(--text-dark);
-        }
-
-        .payment-detail h3 {
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .status.pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status.processing {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .status.shipped {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .status.delivered {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .status.cancelled {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 1.5rem;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        .btn-primary {
+        .products-table th {
             background-color: var(--primary-color);
             color: white;
+            font-weight: bold;
         }
 
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
+        .products-table tr:hover {
+            background-color: #f5f5f5;
         }
 
-        .btn-warning {
-            background-color: var(--warning-color);
-            color: var(--text-dark);
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
         }
 
         /* Controls Section */
@@ -310,7 +192,7 @@
             flex: 1;
         }
 
-        .search-btn, .add-user-btn {
+        .search-btn, .add-product-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -320,7 +202,7 @@
             transition: background-color 0.3s;
         }
 
-        .search-btn:hover, .add-user-btn:hover {
+        .search-btn:hover, .add-product-btn:hover {
             background-color: var(--secondary-color);
         }
 
@@ -433,20 +315,50 @@
             display: none;
         }
 
-        /* User Management Section */
-        .user-management {
-            background-color: white;
+        /* Action buttons */
+        .btn {
+            padding: 6px 12px;
+            border: none;
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 2rem;
-            margin-top: 3rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
-        .user-management h2 {
-            color: var(--secondary-color);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--text-dark);
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
         }
 
         /* Toast Notification */
@@ -517,13 +429,9 @@
                 font-size: 0.9rem;
             }
 
-            .order-body {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
+            .products-table {
+                display: block;
+                overflow-x: auto;
             }
         }
     </style>
@@ -536,8 +444,7 @@
                 <span class="brand-name">Lam Shop</span>
             </div>
             <nav>
-                <a href="admin_page.html" class="active">Orders</a>
-                <a href="#" id="showUsers">User Management</a>
+                <a href="admin_page.html" class="active">Products</a>
                 <button id="logout">Logout</button>
             </nav>
         </div>
@@ -545,76 +452,53 @@
 
     <div class="main">
         <div class="admin-header">
-            <h1>Admin Dashboard</h1>
-            <p>Manage all customer orders and user accounts</p>
+            <h1>Product Management</h1>
+            <p>Manage all products in your inventory</p>
         </div>
         
-        <!-- Orders Section -->
-        <div id="ordersSection">
-            <div class="controls">
-                <div class="search-box">
-                    <input type="text" class="search-input" id="searchInput" placeholder="Search orders...">
-                    <button class="search-btn" id="searchBtn">Search</button>
-                </div>
-                <button class="add-user-btn" id="addOrderBtn">Add New Order</button>
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search products...">
+                <button class="search-btn" id="searchBtn">Search</button>
             </div>
-            
-            <div id="ordersList">
-                <!-- Orders will be loaded here dynamically -->
-                <div class="loader" id="loader">Loading orders...</div>
-            </div>
+            <button class="add-product-btn" id="addProductBtn">Add New Product</button>
         </div>
         
-        <!-- User Management Section (Initially hidden) -->
-        <div class="user-management" id="usersSection" style="display: none;">
-            <h2>User Management</h2>
-            <div class="controls">
-                <div class="search-box">
-                    <input type="text" class="search-input" id="userSearchInput" placeholder="Search users...">
-                    <button class="search-btn" id="userSearchBtn">Search</button>
-                </div>
-                <button class="add-user-btn" id="addUserBtn">Add New User</button>
-            </div>
-            
-            <table id="userTable">
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>UID</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="userTableBody">
-                    <!-- User data will be loaded here -->
-                </tbody>
-            </table>
-        </div>
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Proof</th>
+                    <th>Day of Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productsTableBody">
+                <!-- Products will be loaded here dynamically -->
+                <tr>
+                    <td colspan="7" class="loader">Loading products...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <!-- Order Modal -->
-    <div class="modal" id="orderModal">
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Edit Order</h2>
-                <button class="close-modal" id="closeOrderModal">&times;</button>
+                <h2 id="modalTitle">Add New Product</h2>
+                <button class="close-modal" id="closeProductModal">&times;</button>
             </div>
-            <form id="orderForm">
-                <input type="hidden" id="orderId">
+            <form id="productForm">
+                <input type="hidden" id="productId">
                 
                 <div class="form-group">
-                    <label for="orderStatus">Status</label>
-                    <select id="orderStatus" required>
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="shipped">Shipped</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerEmail">Customer Email</label>
-                    <input type="email" id="customerEmail" required>
+                    <label for="productCustomId">Product ID</label>
+                    <input type="text" id="productCustomId" required placeholder="Enter unique product ID">
+                    <div class="error-message" id="idError">This ID already exists. Please choose a different one.</div>
                 </div>
                 
                 <div class="form-group">
@@ -623,57 +507,27 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="productPrice">Price</label>
+                    <label for="productPrice">Price (₱)</label>
                     <input type="number" id="productPrice" step="0.01" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="productQuantity">Quantity</label>
-                    <input type="number" id="productQuantity" required>
+                    <label for="productImage">Image URL</label>
+                    <input type="text" id="productImage" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="orderDate">Order Date</label>
-                    <input type="datetime-local" id="orderDate" required>
+                    <label for="productProof">Proof</label>
+                    <input type="text" id="productProof" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="shippingAddress">Shipping Address</label>
-                    <textarea id="shippingAddress" required></textarea>
+                    <label for="productDayOfStock">Day of Stock</label>
+                    <input type="number" id="productDayOfStock" required>
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="modal-btn modal-cancel" id="cancelOrderBtn">Cancel</button>
-                    <button type="submit" class="modal-btn modal-submit">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- User Modal -->
-    <div class="modal" id="userModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="userModalTitle">Add New User</h2>
-                <button class="close-modal" id="closeUserModal">&times;</button>
-            </div>
-            <form id="userForm">
-                <input type="hidden" id="userId">
-                
-                <div class="form-group">
-                    <label for="userEmail">Email</label>
-                    <input type="email" id="userEmail" required>
-                    <div class="error-message" id="emailError"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="userPassword">Password</label>
-                    <input type="password" id="userPassword" required>
-                    <div class="error-message" id="passwordError"></div>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="modal-btn modal-cancel" id="cancelUserBtn">Cancel</button>
+                    <button type="button" class="modal-btn modal-cancel" id="cancelProductBtn">Cancel</button>
                     <button type="submit" class="modal-btn modal-submit">Save</button>
                 </div>
             </form>
@@ -716,44 +570,32 @@
         
         // DOM elements
         const logoutBtn = document.getElementById('logout');
-        const showUsersBtn = document.getElementById('showUsers');
-        const ordersSection = document.getElementById('ordersSection');
-        const usersSection = document.getElementById('usersSection');
-        const ordersList = document.getElementById('ordersList');
-        const loader = document.getElementById('loader');
+        const productsTableBody = document.getElementById('productsTableBody');
+        const loader = document.querySelector('.loader');
         
-        // Order modal elements
-        const orderModal = document.getElementById('orderModal');
-        const orderForm = document.getElementById('orderForm');
-        const orderIdInput = document.getElementById('orderId');
-        const orderStatusInput = document.getElementById('orderStatus');
-        const customerEmailInput = document.getElementById('customerEmail');
+        // Product modal elements
+        const productModal = document.getElementById('productModal');
+        const productForm = document.getElementById('productForm');
+        const productIdInput = document.getElementById('productId');
+        const productCustomIdInput = document.getElementById('productCustomId');
         const productNameInput = document.getElementById('productName');
         const productPriceInput = document.getElementById('productPrice');
-        const productQuantityInput = document.getElementById('productQuantity');
-        const orderDateInput = document.getElementById('orderDate');
-        const shippingAddressInput = document.getElementById('shippingAddress');
-        const closeOrderModal = document.getElementById('closeOrderModal');
-        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
-        const addOrderBtn = document.getElementById('addOrderBtn');
-        
-        // User modal elements
-        const userModal = document.getElementById('userModal');
-        const userForm = document.getElementById('userForm');
-        const userIdInput = document.getElementById('userId');
-        const userEmailInput = document.getElementById('userEmail');
-        const userPasswordInput = document.getElementById('userPassword');
-        const closeUserModal = document.getElementById('closeUserModal');
-        const cancelUserBtn = document.getElementById('cancelUserBtn');
-        const addUserBtn = document.getElementById('addUserBtn');
+        const productImageInput = document.getElementById('productImage');
+        const productProofInput = document.getElementById('productProof');
+        const productDayOfStockInput = document.getElementById('productDayOfStock');
+        const closeProductModal = document.getElementById('closeProductModal');
+        const cancelProductBtn = document.getElementById('cancelProductBtn');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const idError = document.getElementById('idError');
         
         // Notification elements
         const notification = document.getElementById('notification');
         const notificationMessage = document.getElementById('notification-message');
         const closeNotification = document.getElementById('close-notification');
         
-        // Current editing order
-        let currentEditOrder = null;
+        // Current editing product
+        let currentEditProduct = null;
+        let existingProductIds = new Set();
         
         // Check authentication on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -762,8 +604,8 @@
                     // Not logged in, redirect to login page
                     window.location.href = 'admin_login.html';
                 } else {
-                    // User is logged in, load data
-                    loadOrders();
+                    // User is logged in, load products
+                    loadProducts();
                 }
             });
         });
@@ -777,432 +619,230 @@
             });
         });
         
-        // Toggle between orders and users sections
-        showUsersBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            ordersSection.style.display = 'none';
-            usersSection.style.display = 'block';
-            loadUsers();
-        });
-        
-        // Load orders from Firestore
-        function loadOrders() {
+        // Load products from Firestore
+        function loadProducts() {
             showLoader();
+            existingProductIds.clear();
             
-            db.collection('orders').get()
+            db.collection('all_products').get()
                 .then(querySnapshot => {
-                    ordersList.innerHTML = '';
+                    productsTableBody.innerHTML = '';
                     
                     if (querySnapshot.empty) {
-                        ordersList.innerHTML = '<div class="no-data">No orders found</div>';
+                        productsTableBody.innerHTML = '<tr><td colspan="7" class="no-data">No products found</td></tr>';
                         return;
                     }
                     
                     querySnapshot.forEach(doc => {
-                        const order = doc.data();
-                        addOrderToDOM(order, doc.id);
+                        const product = doc.data();
+                        addProductToTable(product, doc.id);
+                        
+                        // Track existing product IDs
+                        if (product.customId) {
+                            existingProductIds.add(product.customId);
+                        }
                     });
                 })
                 .catch(error => {
-                    console.error('Error loading orders:', error);
-                    showNotification('Error loading orders: ' + error.message, false);
+                    console.error('Error loading products:', error);
+                    showNotification('Error loading products: ' + error.message, false);
                 })
                 .finally(() => {
                     hideLoader();
                 });
         }
         
-        // Add order to DOM
-        function addOrderToDOM(order, orderId) {
-            const orderElement = document.createElement('div');
-            orderElement.className = 'order';
-            orderElement.setAttribute('data-id', orderId);
-            
-            // Format date
-            const orderDate = order.orderDate ? new Date(order.orderDate.seconds * 1000) : new Date();
-            const formattedDate = orderDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            // Determine status class
-            const statusClass = order.status || 'pending';
-            
-            orderElement.innerHTML = `
-                <div class="order-header">
-                    <div>
-                        <span class="order-id">Order #${orderId}</span>
-                        <span class="status ${statusClass}">${statusClass}</span>
-                    </div>
-                    <div class="order-date">${formattedDate}</div>
-                </div>
-                <div class="order-body">
-                    <div class="order-box">
-                        <h1>Product Details</h1>
-                        <img src="${order.productImage || 'images/Lambanog_Logo.png'}" alt="Product Image">
-                        <div class="product-detail">
-                            <p><strong>Name:</strong> ${order.productName || 'N/A'}</p>
-                            <p><strong>Price:</strong> ₱${order.productPrice || '0.00'}</p>
-                            <p><strong>Quantity:</strong> ${order.productQuantity || '1'}</p>
-                        </div>
-                    </div>
-                    <div class="order-box">
-                        <h1>Payment Details</h1>
-                        <div class="payment-detail">
-                            <h3><strong>Customer:</strong> ${order.customerEmail || 'N/A'}</h3>
-                            <h3><strong>Total:</strong> ₱${(order.productPrice * order.productQuantity || 0).toFixed(2)}</h3>
-                            <h3><strong>Shipping Address:</strong></h3>
-                            <p>${order.shippingAddress || 'N/A'}</p>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary edit-order-btn">Edit</button>
-                            <button class="btn btn-danger delete-order-btn">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            ordersList.appendChild(orderElement);
-            
-            // Add event listeners to buttons
-            orderElement.querySelector('.edit-order-btn').addEventListener('click', () => openEditOrderModal(order, orderId));
-            orderElement.querySelector('.delete-order-btn').addEventListener('click', () => deleteOrder(orderId));
-        }
-        
-        // Open modal for editing order
-        function openEditOrderModal(order, orderId) {
-            currentEditOrder = { ...order, id: orderId };
-            
-            // Set modal title
-            document.getElementById('modalTitle').textContent = 'Edit Order';
-            
-            // Fill form with order data
-            orderIdInput.value = orderId;
-            orderStatusInput.value = order.status || 'pending';
-            customerEmailInput.value = order.customerEmail || '';
-            productNameInput.value = order.productName || '';
-            productPriceInput.value = order.productPrice || '';
-            productQuantityInput.value = order.productQuantity || 1;
-            
-            // Convert Firestore timestamp to datetime-local format
-            const orderDate = order.orderDate ? new Date(order.orderDate.seconds * 1000) : new Date();
-            const formattedDate = orderDate.toISOString().slice(0, 16);
-            orderDateInput.value = formattedDate;
-            
-            shippingAddressInput.value = order.shippingAddress || '';
-            
-            // Show modal
-            orderModal.style.display = 'flex';
-        }
-        
-        // Open modal for adding new order
-        addOrderBtn.addEventListener('click', () => {
-            currentEditOrder = null;
-            document.getElementById('modalTitle').textContent = 'Add New Order';
-            orderForm.reset();
-            orderModal.style.display = 'flex';
-        });
-        
-        // Close order modal
-        function closeOrderModalFunc() {
-            orderModal.style.display = 'none';
-        }
-        
-        closeOrderModal.addEventListener('click', closeOrderModalFunc);
-        cancelOrderBtn.addEventListener('click', closeOrderModalFunc);
-        
-        // Order form submission
-        orderForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const orderData = {
-                status: orderStatusInput.value,
-                customerEmail: customerEmailInput.value,
-                productName: productNameInput.value,
-                productPrice: parseFloat(productPriceInput.value),
-                productQuantity: parseInt(productQuantityInput.value),
-                orderDate: new Date(orderDateInput.value),
-                shippingAddress: shippingAddressInput.value,
-                updatedAt: new Date()
-            };
-            
-            if (currentEditOrder) {
-                // Update existing order
-                updateOrder(currentEditOrder.id, orderData);
-            } else {
-                // Add new order
-                addOrder(orderData);
-            }
-        });
-        
-        // Add new order to Firestore
-        function addOrder(orderData) {
-            showLoader();
-            
-            db.collection('orders').add(orderData)
-                .then(() => {
-                    closeOrderModalFunc();
-                    loadOrders();
-                    showNotification('Order added successfully');
-                })
-                .catch(error => {
-                    console.error('Error adding order:', error);
-                    showNotification('Error adding order: ' + error.message, false);
-                })
-                .finally(() => {
-                    hideLoader();
-                });
-        }
-        
-        // Update order in Firestore
-        function updateOrder(orderId, orderData) {
-            showLoader();
-            
-            db.collection('orders').doc(orderId).update(orderData)
-                .then(() => {
-                    closeOrderModalFunc();
-                    loadOrders();
-                    showNotification('Order updated successfully');
-                })
-                .catch(error => {
-                    console.error('Error updating order:', error);
-                    showNotification('Error updating order: ' + error.message, false);
-                })
-                .finally(() => {
-                    hideLoader();
-                });
-        }
-        
-        // Delete order from Firestore
-        function deleteOrder(orderId) {
-            if (confirm('Are you sure you want to delete this order?')) {
-                showLoader();
-                
-                db.collection('orders').doc(orderId).delete()
-                    .then(() => {
-                        loadOrders();
-                        showNotification('Order deleted successfully');
-                    })
-                    .catch(error => {
-                        console.error('Error deleting order:', error);
-                        showNotification('Error deleting order: ' + error.message, false);
-                    })
-                    .finally(() => {
-                        hideLoader();
-                    });
-            }
-        }
-        
-        // Load users from Firebase Authentication
-        function loadUsers() {
-            showLoader();
-            
-            // Note: In a real app, you would need a Cloud Function to list users
-            // This is a simplified version for demo purposes
-            
-            // For now, we'll just show the current user
-            const currentUser = auth.currentUser;
-            const userTableBody = document.getElementById('userTableBody');
-            userTableBody.innerHTML = '';
-            
-            if (currentUser) {
-                addUserToTable(currentUser.uid, currentUser.email);
-            } else {
-                userTableBody.innerHTML = '<tr><td colspan="3" class="no-data">No users found</td></tr>';
-            }
-            
-            hideLoader();
-        }
-        
-        // Add user to table
-        function addUserToTable(uid, email) {
+        // Add product to table
+        function addProductToTable(product, productId) {
             const row = document.createElement('tr');
-            row.setAttribute('data-id', uid);
+            row.setAttribute('data-id', productId);
             
             row.innerHTML = `
-                <td>${email}</td>
-                <td>${uid}</td>
+                <td>${product.customId || 'N/A'}</td>
+                <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
+                <td>${product.name}</td>
+                <td>₱${product.priceCents}</td>
+                <td>${product.proof}</td>
+                <td>${product.dayOfStock}</td>
                 <td>
-                    <button class="btn btn-warning edit-user-btn">Edit</button>
-                    <button class="btn btn-danger delete-user-btn">Delete</button>
+                    <button class="btn btn-primary edit-product-btn">Edit</button>
+                    <button class="btn btn-danger delete-product-btn">Delete</button>
                 </td>
             `;
             
-            document.getElementById('userTableBody').appendChild(row);
+            productsTableBody.appendChild(row);
             
-            // Add event listeners
-            row.querySelector('.edit-user-btn').addEventListener('click', () => openEditUserModal(uid, email));
-            row.querySelector('.delete-user-btn').addEventListener('click', () => deleteUser(uid));
+            // Add event listeners to buttons
+            row.querySelector('.edit-product-btn').addEventListener('click', () => openEditProductModal(product, productId));
+            row.querySelector('.delete-product-btn').addEventListener('click', () => deleteProduct(productId, product.customId));
         }
         
-        // Open modal for editing user
-        function openEditUserModal(uid, email) {
-            document.getElementById('userModalTitle').textContent = 'Edit User';
-            userIdInput.value = uid;
-            userEmailInput.value = email;
-            userPasswordInput.value = '';
-            userModal.style.display = 'flex';
+        // Check if product ID already exists
+        function checkProductIdExists(customId, excludeCurrentProduct = false) {
+            if (excludeCurrentProduct && currentEditProduct && currentEditProduct.customId === customId) {
+                return false;
+            }
+            return existingProductIds.has(customId);
         }
         
-        // Open modal for adding new user
-        addUserBtn.addEventListener('click', () => {
-            document.getElementById('userModalTitle').textContent = 'Add New User';
-            userForm.reset();
-            userIdInput.value = '';
-            userModal.style.display = 'flex';
+        // Validate product ID
+        productCustomIdInput.addEventListener('input', () => {
+            const customId = productCustomIdInput.value.trim();
+            if (customId && checkProductIdExists(customId, true)) {
+                idError.style.display = 'block';
+                productCustomIdInput.style.borderColor = 'var(--danger-color)';
+            } else {
+                idError.style.display = 'none';
+                productCustomIdInput.style.borderColor = '#ddd';
+            }
         });
         
-        // Close user modal
-        function closeUserModalFunc() {
-            userModal.style.display = 'none';
-            document.getElementById('emailError').style.display = 'none';
-            document.getElementById('passwordError').style.display = 'none';
+        // Open modal for editing product
+        function openEditProductModal(product, productId) {
+            currentEditProduct = { ...product, id: productId };
+            
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            
+            // Fill form with product data
+            productIdInput.value = productId;
+            productCustomIdInput.value = product.customId || '';
+            productNameInput.value = product.name || '';
+            productPriceInput.value = product.priceCents || '';
+            productImageInput.value = product.image || '';
+            productProofInput.value = product.proof || '';
+            productDayOfStockInput.value = product.dayOfStock || '';
+            
+            // Reset error states
+            idError.style.display = 'none';
+            productCustomIdInput.style.borderColor = '#ddd';
+            
+            productModal.style.display = 'flex';
         }
         
-        closeUserModal.addEventListener('click', closeUserModalFunc);
-        cancelUserBtn.addEventListener('click', closeUserModalFunc);
+        // Open modal for adding new product
+        addProductBtn.addEventListener('click', () => {
+            currentEditProduct = null;
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            productForm.reset();
+            
+            // Reset error states
+            idError.style.display = 'none';
+            productCustomIdInput.style.borderColor = '#ddd';
+            
+            productModal.style.display = 'flex';
+        });
         
-        // User form submission
-        userForm.addEventListener('submit', (e) => {
+        // Close product modal
+        function closeProductModalFunc() {
+            productModal.style.display = 'none';
+            // Reset error states
+            idError.style.display = 'none';
+            productCustomIdInput.style.borderColor = '#ddd';
+        }
+        
+        closeProductModal.addEventListener('click', closeProductModalFunc);
+        cancelProductBtn.addEventListener('click', closeProductModalFunc);
+        
+        // Product form submission
+        productForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const email = userEmailInput.value.trim();
-            const password = userPasswordInput.value.trim();
-            const userId = userIdInput.value;
+            const customId = productCustomIdInput.value.trim();
             
-            // Validate inputs
-            if (!validateEmail(email)) {
-                document.getElementById('emailError').textContent = 'Please enter a valid email';
-                document.getElementById('emailError').style.display = 'block';
+            // Validate custom ID
+            if (!customId) {
+                showNotification('Product ID is required', false);
                 return;
             }
             
-            if (!userId && password.length < 6) {
-                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
-                document.getElementById('passwordError').style.display = 'block';
+            if (checkProductIdExists(customId, true)) {
+                idError.style.display = 'block';
+                productCustomIdInput.style.borderColor = 'var(--danger-color)';
+                showNotification('This Product ID already exists. Please choose a different one.', false);
                 return;
             }
             
-            if (userId) {
-                // Update existing user
-                updateUser(userId, email, password);
+            const productData = {
+                customId: customId,
+                name: productNameInput.value,
+                priceCents: parseFloat(productPriceInput.value),
+                image: productImageInput.value,
+                proof: productProofInput.value,
+                dayOfStock: parseInt(productDayOfStockInput.value)
+            };
+            
+            if (currentEditProduct) {
+                updateProduct(currentEditProduct.id, productData);
             } else {
-                // Add new user
-                createUser(email, password);
+                addProduct(productData);
             }
         });
         
-        // Create new user
-        function createUser(email, password) {
+        // Add new product to Firestore
+        function addProduct(productData) {
             showLoader();
             
-            auth.createUserWithEmailAndPassword(email, password)
+            db.collection('all_products').add(productData)
                 .then(() => {
-                    closeUserModalFunc();
-                    loadUsers();
-                    showNotification('User created successfully');
+                    closeProductModalFunc();
+                    loadProducts();
+                    showNotification('Product added successfully');
                 })
                 .catch(error => {
-                    console.error('Error creating user:', error);
-                    showNotification('Error creating user: ' + error.message, false);
+                    console.error('Error adding product:', error);
+                    showNotification('Error adding product: ' + error.message, false);
                 })
                 .finally(() => {
                     hideLoader();
                 });
         }
         
-        // Update user
-        function updateUser(uid, email, password) {
+        // Update product in Firestore
+        function updateProduct(productId, productData) {
             showLoader();
             
-            // Get the current user
-            const user = auth.currentUser;
-            
-            if (!user) {
-                showNotification('You must be logged in to update users', false);
-                hideLoader();
-                return;
-            }
-            
-            // For demo, we'll just update the email if it's the current user
-            if (user.uid === uid) {
-                const promises = [];
+            db.collection('all_products').doc(productId).update(productData)
+                .then(() => {
+                    closeProductModalFunc();
+                    loadProducts();
+                    showNotification('Product updated successfully');
+                })
+                .catch(error => {
+                    console.error('Error updating product:', error);
+                    showNotification('Error updating product: ' + error.message, false);
+                })
+                .finally(() => {
+                    hideLoader();
+                });
+        }
+        
+        // Delete product from Firestore
+        function deleteProduct(productId, customId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                showLoader();
                 
-                if (email !== user.email) {
-                    promises.push(user.updateEmail(email));
-                }
-                
-                if (password) {
-                    promises.push(user.updatePassword(password));
-                }
-                
-                Promise.all(promises)
+                db.collection('all_products').doc(productId).delete()
                     .then(() => {
-                        closeUserModalFunc();
-                        loadUsers();
-                        showNotification('User updated successfully');
+                        // Remove from existing IDs set
+                        if (customId) {
+                            existingProductIds.delete(customId);
+                        }
+                        loadProducts();
+                        showNotification('Product deleted successfully');
                     })
                     .catch(error => {
-                        console.error('Error updating user:', error);
-                        showNotification('Error updating user: ' + error.message, false);
+                        console.error('Error deleting product:', error);
+                        showNotification('Error deleting product: ' + error.message, false);
                     })
                     .finally(() => {
                         hideLoader();
                     });
-            } else {
-                // In a real app, you would need admin privileges to update other users
-                showNotification('You can only update your own account in this demo', false);
-                hideLoader();
-            }
-        }
-        
-        // Delete user
-        function deleteUser(uid) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                showLoader();
-                
-                // Get the current user
-                const user = auth.currentUser;
-                
-                if (!user) {
-                    showNotification('You must be logged in to delete users', false);
-                    hideLoader();
-                    return;
-                }
-                
-                // For demo, we'll just allow deleting the current user
-                if (user.uid === uid) {
-                    user.delete()
-                        .then(() => {
-                            showNotification('User deleted successfully');
-                            window.location.href = 'admin_login.html';
-                        })
-                        .catch(error => {
-                            console.error('Error deleting user:', error);
-                            showNotification('Error deleting user: ' + error.message, false);
-                        })
-                        .finally(() => {
-                            hideLoader();
-                        });
-                } else {
-                    // In a real app, you would need admin privileges to delete other users
-                    showNotification('You can only delete your own account in this demo', false);
-                    hideLoader();
-                }
             }
         }
         
         // Helper functions
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-        
         function showLoader() {
-            loader.style.display = 'block';
+            loader.style.display = 'table-cell';
         }
         
         function hideLoader() {
