@@ -1,10 +1,11 @@
-import { products } from './items.js';
+import { db } from './firebase-config.js';
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { cart, addToCart } from './cart.js';
 
 // Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Render products grid first
-    renderProductsGrid();
+document.addEventListener('DOMContentLoaded', async () => {
+    // Fetch products from Firestore first
+    await fetchProductsAndRender();
     
     // Update cart quantity display
     updateCartQuantity();
@@ -13,7 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
-function renderProductsGrid() {
+async function fetchProductsAndRender() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "all_products"));
+        const products = [];
+        
+        querySnapshot.forEach((doc) => {
+            const productData = doc.data();
+            products.push({
+                id: doc.id, // Using Firestore document ID
+                ...productData
+            });
+        });
+        
+        renderProductsGrid(products);
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        showNotification("Error loading products. Please try again later.");
+    }
+}
+
+function renderProductsGrid(products) {
     const contentContainer = document.querySelector('.content');
     if (!contentContainer) {
         console.error('Content container not found');

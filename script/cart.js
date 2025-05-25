@@ -36,3 +36,14 @@ export function addToCart(productId, count) {
 
   saveToStorage();
 }
+
+// Add this new function to remove a product from cart
+export function removeFromCart(productId) {
+  const index = cart.findIndex((item) => item.productId === productId);
+  if (index !== -1) {
+    cart.splice(index, 1);
+    saveToStorage();
+    return true;
+  }
+  return false;
+}

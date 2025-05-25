@@ -498,6 +498,13 @@
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+        /* Add this to the existing CSS */
+        .cancel:disabled,
+        .recieved:disabled {
+            background-color: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed !important;
+        }
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {

@@ -1,8 +1,6 @@
-import { products } from './items.js';
-import { cart, saveToStorage } from './cart.js';
 import { db } from './firebase-config.js';
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
+import { collection, addDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { cart, saveToStorage } from './cart.js';
 // Get the input values safely
 const nameElement = document.getElementById("inputName");
 const addressElement = document.getElementById("inputAddress");
@@ -15,7 +13,7 @@ document.querySelector(".remove").addEventListener('click', () => {
 
 renderCart();
 
-function renderCart() {
+async function renderCart() {
     let cartHTML = '';
     
     // Check if cart is empty
@@ -28,34 +26,43 @@ function renderCart() {
             </div>
         `;
     } else {
-        cart.forEach((cartItem) => {
-            const product = products.find((p) => p.id === cartItem.productId);
-            
-            if (product) {
-                cartHTML += `
-                    <div class="product">
-                        <div class="content_center">
-                            <img src="${product.image}" alt="${product.name}">     
-                        </div>
-                        <div class="product-details">
-                            <h3 id="name">${product.name}</h3>
-                           <p id="price">₱${product.priceCents * cartItem.quantity}</p>
-                            <p id="proof">Proof: ${product.proof}</p>
-                            <p id="dayOfStock">Day of Stock: ${product.dayOfStock}</p>
-                            <div class="add_minus">
-                                <button class="minus" data-product-id="${product.id}">-</button>
-                                <h4 data-product-count="${product.id}" id="count" class="count">${cartItem.quantity}</h4>
-                                <button class="add" data-product-id="${product.id}">+</button>
+        // Fetch all products in cart from Firestore
+        for (const cartItem of cart) {
+            try {
+                const productDoc = await getDoc(doc(db, "all_products", cartItem.productId));
+                
+                if (productDoc.exists()) {
+                    const product = productDoc.data();
+                    
+                    cartHTML += `
+                        <div class="product">
+                            <div class="content_center">
+                                <img src="${product.image}" alt="${product.name}">     
                             </div>
-                            <div class="last_row">
-                                <button class="remove_from_cart" data-product-id="${product.id}">Remove</button>
-                                <button class="buy" data-product-id="${product.id}">Buy Now</button>
+                            <div class="product-details">
+                                <h3 id="name">${product.name}</h3>
+                               <p id="price">₱${product.priceCents * cartItem.quantity}</p>
+                                <p id="proof">Proof: ${product.proof}</p>
+                                <p id="dayOfStock">Day of Stock: ${product.dayOfStock}</p>
+                                <div class="add_minus">
+                                    <button class="minus" data-product-id="${productDoc.id}">-</button>
+                                    <h4 data-product-count="${productDoc.id}" id="count" class="count">${cartItem.quantity}</h4>
+                                    <button class="add" data-product-id="${productDoc.id}">+</button>
+                                </div>
+                                <div class="last_row">
+                                    <button class="remove_from_cart" data-product-id="${productDoc.id}">Remove</button>
+                                    <button class="buy" data-product-id="${productDoc.id}">Buy Now</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    console.warn(`Product ${cartItem.productId} not found in Firestore`);
+                }
+            } catch (error) {
+                console.error(`Error fetching product ${cartItem.productId}:`, error);
             }
-        });
+        }
     }
 
     document.querySelector('.content').innerHTML = cartHTML;
@@ -64,6 +71,7 @@ function renderCart() {
     attachEventListeners();
     updateCartQuantity();
 }
+
 
 function attachEventListeners() {
     // Add button
