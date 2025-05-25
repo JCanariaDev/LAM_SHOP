@@ -171,90 +171,6 @@
             margin: 1rem 0;
         }
 
-        .featured-products {
-            grid-column: 1 / -1;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 2rem;
-        }
-
-        .featured-products h2 {
-            color: var(--secondary-color);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background-color: var(--background-light);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-image {
-            height: 180px;
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-details {
-            padding: 15px;
-        }
-
-        .product-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .product-price {
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .product-description {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 8px 0;
-        }
-
-        .add-to-cart {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
-
-        .add-to-cart:hover {
-            background-color: var(--secondary-color);
-        }
-
         .dashboard-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -465,7 +381,7 @@
                 font-size: 0.9rem;
             }
 
-            .welcome-card, .featured-products, .dashboard-card, .special-offers {
+            .welcome-card, .dashboard-card, .special-offers {
                 padding: 1.5rem;
             }
         }
@@ -529,56 +445,6 @@
                     <i>💬</i>
                     <h3>Support</h3>
                     <p>Need help? Contact our customer service</p>
-                </div>
-            </div>
-
-            <div class="featured-products">
-                <h2>Featured Products</h2>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/api/placeholder/300/300" alt="Lambanog Original">
-                        </div>
-                        <div class="product-details">
-                            <div class="product-title">Lambanog Original</div>
-                            <div class="product-price">₱350.00</div>
-                            <div class="product-description">Traditional coconut wine with smooth, clean taste.</div>
-                            <button class="add-to-cart" data-id="1">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/api/placeholder/300/300" alt="Lambanog Mango">
-                        </div>
-                        <div class="product-details">
-                            <div class="product-title">Lambanog Mango</div>
-                            <div class="product-price">₱380.00</div>
-                            <div class="product-description">Sweet mango-infused coconut wine specialty.</div>
-                            <button class="add-to-cart" data-id="2">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/api/placeholder/300/300" alt="Lambanog Premium">
-                        </div>
-                        <div class="product-details">
-                            <div class="product-title">Lambanog Premium</div>
-                            <div class="product-price">₱450.00</div>
-                            <div class="product-description">Aged premium coconut wine with rich flavor.</div>
-                            <button class="add-to-cart" data-id="3">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/api/placeholder/300/300" alt="Lambanog Gift Set">
-                        </div>
-                        <div class="product-details">
-                            <div class="product-title">Lambanog Gift Set</div>
-                            <div class="product-price">₱650.00</div>
-                            <div class="product-description">Perfect gift set with 3 flavors and shot glasses.</div>
-                            <button class="add-to-cart" data-id="4">Add to Cart</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -675,28 +541,6 @@
             localStorage.setItem('cartCount', count);
         }
 
-        // Add to cart functionality
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                /*const productId = button.getAttribute('data-id');
-                // In a real app, you would add the product to cart in a more sophisticated way
-                cartCount = parseInt(cartCount) + 1;
-                updateCartCount(cartCount);
-                
-                // Show notification
-                showNotification('Item added to cart!');
-                
-                // You would typically store the cart items in localStorage or a database
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                cart.push({
-                    id: productId,
-                    quantity: 1
-                });
-                localStorage.setItem('cart', JSON.stringify(cart));*/
-            });
-        });
-
         // Notification functionality
         const notification = document.getElementById('notification');
         const notificationMessage = document.getElementById('notification-message');
@@ -743,6 +587,6 @@
             });
         });
     </script>
-     <script type="module" src="script/index.js"></script>
+    <script type="module" src="script/index.js"></script>
 </body>
 </html>
