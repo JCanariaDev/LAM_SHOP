@@ -261,10 +261,11 @@ orderForm.addEventListener('submit', async (event) => {
         email,
         address, 
         payment,
-        productID,    
+        productID,   
+        basedPrice: productPrice / productCount, 
         productPrice,
         productCount,
-        productProof,
+        productProof,       
         productDayOfStock,
         deliveryDate,
         status: "Pending",
@@ -380,7 +381,7 @@ function renderCartSummary() {
             
             // Add event listener for checkout all button
             document.getElementById('checkoutAll').addEventListener('click', () => {
-                alert('Checkout all functionality would be implemented here');
+                alert('Checkout all functionality would be implemented soon!');
                 // This could open a bulk checkout form
             });
         }

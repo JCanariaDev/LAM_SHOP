@@ -247,7 +247,7 @@ async function loadOrders() {
                             <img src="${product.image}" alt="Product Image">
                             <div class="product-detail">
                                 <p><strong>Product:</strong> ${product.name || 'Lambanog'}</p>
-                                <p><strong>Price:</strong> ₱${data.productPrice}</p>
+                                <p><strong>Price:</strong> ₱${data.basedPrice}</p>
                                 <p><strong>Proof:</strong> ${data.productProof}%</p>
                                 <p><strong>Stock Date:</strong> ${data.productDayOfStock}</p>
                                 <p><strong>Quantity:</strong> ${data.productCount}</p>
