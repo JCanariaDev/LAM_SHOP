@@ -206,7 +206,7 @@ async function loadOrders() {
             const product = firestoreProducts.find((p) => p.id === data.productID);
             
             // Validate image URL and provide fallback if invalid
-            let productImage = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+            let productImage = 'images/container.png';
             if (product?.image) {
                 try {
                     new URL(product.image);
@@ -229,7 +229,7 @@ async function loadOrders() {
                 <div class="order-body">
                     <div class="order-box">
                         <h1>Product Details</h1>
-                        <img src="${productImage}" alt="Product Image" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'">
+                        <img src="${productImage}" alt="Product Image" onerror="this.src='images/container.png'">
                         <div class="product-detail">
                             <p><strong>Product:</strong> ${productName}</p>
                             <p><strong>Price:</strong> ₱${data.basedPrice || data.productPrice / data.productCount || 'N/A'}</p>

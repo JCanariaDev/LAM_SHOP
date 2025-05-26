@@ -51,13 +51,13 @@ function renderProductsGrid(products) {
             new URL(imageUrl);
         } catch (e) {
             // If URL is invalid, use fallback image
-            imageUrl = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+            imageUrl = 'images/container.png';
         }
         
         productsHTML += `
         <div class="product" data-product-id="${product.id}">
             <div class="content_center">
-                <img src="${imageUrl}" alt="${product.name}" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'">     
+                <img src="${imageUrl}" alt="${product.name}" onerror="this.src='images/container.png'">     
             </div>
             <div class="product-details">
                 <div class="product-info">
