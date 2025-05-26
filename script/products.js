@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
 });
 
+
 async function fetchProductsAndRender() {
     try {
         const querySnapshot = await getDocs(collection(db, "all_products"));
@@ -44,10 +45,19 @@ function renderProductsGrid(products) {
     let productsHTML = '';
   
     products.forEach((product) => {
-      productsHTML += `
+        // Validate image URL and provide fallback if invalid
+        let imageUrl = product.image;
+        try {
+            new URL(imageUrl);
+        } catch (e) {
+            // If URL is invalid, use fallback image
+            imageUrl = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+        }
+        
+        productsHTML += `
         <div class="product" data-product-id="${product.id}">
             <div class="content_center">
-                <img src="${product.image}" alt="${product.name}">     
+                <img src="${imageUrl}" alt="${product.name}" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'">     
             </div>
             <div class="product-details">
                 <div class="product-info">
@@ -71,6 +81,8 @@ function renderProductsGrid(products) {
   
     contentContainer.innerHTML = productsHTML;
 }
+
+
 
 function setupEventListeners() {
     // Event listener for Add to Cart buttons

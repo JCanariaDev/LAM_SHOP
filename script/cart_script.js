@@ -13,6 +13,7 @@ document.querySelector(".remove").addEventListener('click', () => {
 
 renderCart();
 
+
 async function renderCart() {
     let cartHTML = '';
     
@@ -34,10 +35,19 @@ async function renderCart() {
                 if (productDoc.exists()) {
                     const product = productDoc.data();
                     
+                    // Validate image URL and provide fallback if invalid
+                    let imageUrl = product.image;
+                    try {
+                        new URL(imageUrl);
+                    } catch (e) {
+                        // If URL is invalid, use fallback image
+                        imageUrl = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+                    }
+                    
                     cartHTML += `
                         <div class="product">
                             <div class="content_center">
-                                <img src="${product.image}" alt="${product.name}">     
+                                <img src="${imageUrl}" alt="${product.name}" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'">     
                             </div>
                             <div class="product-details">
                                 <h3 id="name">${product.name}</h3>
@@ -71,6 +81,7 @@ async function renderCart() {
     attachEventListeners();
     updateCartQuantity();
 }
+
 
 
 function attachEventListeners() {

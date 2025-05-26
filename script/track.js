@@ -205,10 +205,20 @@ async function loadOrders() {
             // Try to find product in Firestore products
             const product = firestoreProducts.find((p) => p.id === data.productID);
             
+            // Validate image URL and provide fallback if invalid
+            let productImage = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+            if (product?.image) {
+                try {
+                    new URL(product.image);
+                    productImage = product.image;
+                } catch (e) {
+                    // URL is invalid, use fallback
+                }
+            }
+            
             // Format order data
             const orderId = doc.id;
             const orderDate = formatDate(data.timestamp);
-            const productImage = product?.image || 'images/container.png';
             const productName = product?.name || data.inputPName || 'Lambanog Product';
             
             orderDiv.innerHTML = `
@@ -219,7 +229,7 @@ async function loadOrders() {
                 <div class="order-body">
                     <div class="order-box">
                         <h1>Product Details</h1>
-                        <img src="${productImage}" alt="Product Image">
+                        <img src="${productImage}" alt="Product Image" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'">
                         <div class="product-detail">
                             <p><strong>Product:</strong> ${productName}</p>
                             <p><strong>Price:</strong> ₱${data.basedPrice || data.productPrice / data.productCount || 'N/A'}</p>
@@ -243,8 +253,8 @@ async function loadOrders() {
                                     ${data.status?.toLowerCase() === 'cancelled' ? 'Cancelled' : 'Cancel Order'}
                                 </button>
                                 <button class="recieved" ${['recieved', 'delivered', 'cancelled'].includes(data.status?.toLowerCase()) ? 'disabled' : ''}>
-    ${['recieved', 'delivered'].includes(data.status?.toLowerCase()) ? 'Received' : 'Mark as Received'}
-</button>
+                                    ${['recieved', 'delivered'].includes(data.status?.toLowerCase()) ? 'Received' : 'Mark as Received'}
+                                </button>
                             </div>         
                         </div>
                     </div>
@@ -258,43 +268,43 @@ async function loadOrders() {
             const cancelButton = orderDiv.querySelector(".cancel");
             const recievedButton = orderDiv.querySelector(".recieved");
 
-           cancelButton?.addEventListener("click", async () => {
-    if (cancelButton.disabled) return;
-    
-    if (confirm("Are you sure you want to cancel this order?")) {
-        try {
-            cancelButton.disabled = true;
-            cancelButton.textContent = "Cancelling...";
-            
-            await updateDoc(doc.ref, {
-                status: "Cancelled",
-                cancelledAt: new Date()
-            });
-            
-            showNotification("✅ Order cancelled successfully!", "success");
-            cancelButton.textContent = "Cancelled";
-            
-            // Update status display
-            const statusElement = orderDiv.querySelector(".status");
-            if (statusElement) {
-                statusElement.textContent = "Cancelled";
-                statusElement.className = "status cancelled";
-            }
+            cancelButton?.addEventListener("click", async () => {
+                if (cancelButton.disabled) return;
+                
+                if (confirm("Are you sure you want to cancel this order?")) {
+                    try {
+                        cancelButton.disabled = true;
+                        cancelButton.textContent = "Cancelling...";
+                        
+                        await updateDoc(doc.ref, {
+                            status: "Cancelled",
+                            cancelledAt: new Date()
+                        });
+                        
+                        showNotification("✅ Order cancelled successfully!", "success");
+                        cancelButton.textContent = "Cancelled";
+                        
+                        // Update status display
+                        const statusElement = orderDiv.querySelector(".status");
+                        if (statusElement) {
+                            statusElement.textContent = "Cancelled";
+                            statusElement.className = "status cancelled";
+                        }
 
-            // NEW: Immediately disable and update the "Mark as Received" button
-            const recievedButton = orderDiv.querySelector(".recieved");
-            if (recievedButton) {
-                recievedButton.disabled = true;
-                recievedButton.textContent = "Received"; // Optional: Change text to match disabled state
-            }
-        } catch (error) {
-            console.error("Error cancelling order:", error);
-            showNotification("❌ Failed to cancel order", "error");
-            cancelButton.disabled = false;
-            cancelButton.textContent = "Cancel Order";
-        }
-    }
-});
+                        // Immediately disable and update the "Mark as Received" button
+                        const recievedButton = orderDiv.querySelector(".recieved");
+                        if (recievedButton) {
+                            recievedButton.disabled = true;
+                            recievedButton.textContent = "Received";
+                        }
+                    } catch (error) {
+                        console.error("Error cancelling order:", error);
+                        showNotification("❌ Failed to cancel order", "error");
+                        cancelButton.disabled = false;
+                        cancelButton.textContent = "Cancel Order";
+                    }
+                }
+            });
 
             recievedButton?.addEventListener("click", async () => {
                 if (recievedButton.disabled) return;

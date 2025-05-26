@@ -663,9 +663,18 @@
             const row = document.createElement('tr');
             row.setAttribute('data-id', productId);
             
+            // Validate image URL and provide fallback if invalid
+            let imageUrl = product.image;
+            try {
+                new URL(imageUrl);
+            } catch (e) {
+                // If URL is invalid, use fallback image
+                imageUrl = 'https://www.gstatic.com/webp/gallery3/1.sm.png';
+            }
+            
             row.innerHTML = `
                 <td>${product.customId || 'N/A'}</td>
-                <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
+                <td><img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://www.gstatic.com/webp/gallery3/1.sm.png'"></td>
                 <td>${product.name}</td>
                 <td>₱${product.priceCents}</td>
                 <td>${product.proof}</td>
