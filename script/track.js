@@ -69,12 +69,12 @@ function showAuthError() {
 
 updateCartQuantity();
 
-document.querySelector(".remove")?.addEventListener('click', () => {
+/*document.querySelector(".remove")?.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear all cart items?')) {
         removeItems();
         showNotification('🗑️ Cart cleared successfully!', 'success');
     }
-});
+});*/
 
 function removeItems() {
     localStorage.clear();
